@@ -1,0 +1,6 @@
+[project.optional-dependencies]
+test = [
+    "coverage",
+    "pytest",
+    "pytest-cov"
+]

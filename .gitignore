@@ -1,0 +1,4 @@
+*_KEY
+.coverage
+__pycache__
+session.json
