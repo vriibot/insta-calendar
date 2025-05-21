@@ -49,7 +49,7 @@ def test_get_headers_only_users():
     assert len(users_object.keys()) == 0
     os.remove(users.USERS_PATH)
 
-def test_get_headers_only_users():
+def test_get_users():
     file = open(users.USERS_PATH, "w")
     file.write(",".join(users.USERS_KEYS) + "\n" + ",".join(["a", "None", "None", "None"]))
     file.close()
@@ -62,4 +62,16 @@ def test_get_headers_only_users():
 def test_write_empty_users():
     users.USERS = {}
     users.write_users()
-    assert()
+    file = open(users.USERS_PATH, 'r', encoding="utf-8")
+    assert file.read() == ",".join(users.USERS_KEYS) + "\n"
+    file.close()
+    os.remove(users.USERS_PATH)
+
+def test_write_users():
+    users.USERS = {"a" : {"username": "a", "user_id" : None, "full_name": None, "timestamp": None}}
+    users.write_users()
+    file = open(users.USERS_PATH, 'r', encoding="utf-8")
+    assert file.read() == ",".join(users.USERS_KEYS) + "\n" + "a,,,\n"
+    file.close()
+    os.remove(users.USERS_PATH)
+    
