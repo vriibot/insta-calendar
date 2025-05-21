@@ -43,3 +43,4 @@ def write_users():
         writer.writeheader()
         for user in USERS.keys():
             writer.writerow(USERS[user])
+        
