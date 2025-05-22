@@ -1,6 +1,8 @@
 from instagrapi import Client
+from instagrapi.exceptions import UserNotFound
 from os import path
 import json
+
 
 from .users import *
 from . import credentials
@@ -51,14 +53,17 @@ def login():
 
 def mine_user(username, user_data):
    login()
-   # info = cl.user_info_by_username(username).dict()
-   # #is_private
-   # #url
-   # user_data["user_id"] = info["pk"]
-   # user_data["full_name"] = info["full_name"]
-   #             # except Exception as e:
-   #             #  if isinstance(e, UserNotFound):
-   #             #      print(e)
+
+   try:
+      info = cl.user_info_by_username(username).dict()
+   except UserNotFound as e:
+      print(e.message, username)
+      return user_data
+      
+   user_data["user_id"] = info["pk"]
+   user_data["full_name"] = info["full_name"]
+   user_data["is_private"] = info["is_private"]
+   user_data["profile_pic_url"] = str(info["profile_pic_url"])
    return
 
 def get_user_media(cl, user):

@@ -23,3 +23,8 @@ def test_login():
     # except Exception:
     #     assert False
     assert miner.LOGIN == True
+
+def test_mine_bad_user():
+    username = "idontexis^^"
+    user_data = miner.mine_user(username, {})
+    assert len(list(user_data.keys())) == 0

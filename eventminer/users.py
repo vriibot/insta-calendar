@@ -7,7 +7,7 @@ from os import path
 USERS_PATH = "data/users.csv"
 USERNAMES_PATH = "usernames.txt"
 
-USERS_KEYS = ["username", "user_id", "full_name", "timestamp"]
+USERS_KEYS = ["username", "user_id", "full_name", "is_private", "profile_pic_url", "timestamp"]
 # map of usernames to instagram user data
 USERS = {}
 
