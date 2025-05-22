@@ -22,6 +22,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Do session
+      uses: mobiledevops/secret-to-file-action@v1
+      with:
+        base64-encoded-secret: ${{ secrets.SESSION }}
+        filename: "session.json"
+        is-executable: false
+        working-directory: "data"
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -36,8 +43,8 @@ jobs:
           pytest --cov=eventminer --cov-report=xml --cov-report=html
       env:
         INSTAGRAM_USERNAME: ${{ secrets.USERNAME }}
-        INSTAGRAM_PASSWORD: ${{ secrets.USERNAME }}
+        INSTAGRAM_PASSWORD: ${{ secrets.PASSWORD }}
         PROXY_USERNAME: ${{ secrets.PROXY_USERNAME }}
-        PROXY_PASSWORD: ${{ secrets.PROXY_USERNAME }}
-        PROXY_COUNTRY: ${{ secrets.PROXY_USERNAME }}
+        PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+        PROXY_COUNTRY: ${{ secrets.PROXY_COUNTRY }}
         PROXY_HOST_PORT: ${{ secrets.HOST_PORT }}
