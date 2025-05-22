@@ -19,7 +19,9 @@ def login():
    if LOGIN: return
    cl.set_proxy(('https://user-%s-country-%s:%s@%s' % (credentials.PROXY['username'], credentials.PROXY['country'], credentials.PROXY['password'], credentials.PROXY['host_port'])))
 
-   session = cl.load_settings(credentials.SESSION_PATH)
+   session = None
+   if path.exists(credentials.SESSION_PATH):
+      session = cl.load_settings(credentials.SESSION_PATH)
 
    if session:
       cl.set_settings(session)
