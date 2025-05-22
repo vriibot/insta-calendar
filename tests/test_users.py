@@ -72,7 +72,7 @@ def test_write_users():
     users.USERS["a"]["username"] == "a"
     users.write_users()
     file = open(users.USERS_PATH, 'r', encoding="utf-8")
-    assert file.read() == ",".join(users.USERS_KEYS) + "\n" + "a,,,\n"
+    assert file.read() == ",".join(users.USERS_KEYS) + "\n" + "a,,,,,\n"
     file.close()
     os.remove(users.USERS_PATH)
     
