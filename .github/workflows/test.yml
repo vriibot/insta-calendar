@@ -47,4 +47,4 @@ jobs:
         PROXY_USERNAME: ${{ secrets.PROXY_USERNAME }}
         PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
         PROXY_COUNTRY: ${{ secrets.PROXY_COUNTRY }}
-        PROXY_HOST_PORT: ${{ secrets.HOST_PORT }}
+        PROXY_HOST_PORT: ${{ secrets.PROXY_HOST_PORT }}
