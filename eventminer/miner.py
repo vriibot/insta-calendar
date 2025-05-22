@@ -49,14 +49,14 @@ def login():
 
 def mine_user(username, user_data):
    login()
-   info = cl.user_info_by_username(username).dict()
-   #is_private
-   #url
-   user_data["user_id"] = info["pk"]
-   user_data["full_name"] = info["full_name"]
-               # except Exception as e:
-               #  if isinstance(e, UserNotFound):
-               #      print(e)
+   # info = cl.user_info_by_username(username).dict()
+   # #is_private
+   # #url
+   # user_data["user_id"] = info["pk"]
+   # user_data["full_name"] = info["full_name"]
+   #             # except Exception as e:
+   #             #  if isinstance(e, UserNotFound):
+   #             #      print(e)
    return
 
 def get_user_media(cl, user):
