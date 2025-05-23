@@ -69,10 +69,10 @@ def test_write_empty_users():
 
 def test_write_users():
     users.USERS = {"a" : dict.fromkeys(users.USERS_KEYS)}
-    users.USERS["a"]["username"] == "a"
+    users.USERS["a"]["username"] = "a"
     users.write_users()
     file = open(users.USERS_PATH, 'r', encoding="utf-8")
-    assert file.read() == ",".join(users.USERS_KEYS) + "\n" + "a,,,,,\n"
+    assert file.read() == ",".join(users.USERS_KEYS) + "\n" + "a" + ("," * (len(users.USERS_KEYS)-1))  + "\n"
     file.close()
     os.remove(users.USERS_PATH)
     
