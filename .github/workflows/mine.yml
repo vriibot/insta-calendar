@@ -41,7 +41,11 @@ jobs:
           PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
           PROXY_COUNTRY: ${{ secrets.PROXY_COUNTRY }}
           PROXY_HOST_PORT: ${{ secrets.PROXY_HOST_PORT }}
-  
+      - name: Debug Git Changes
+        run: |
+          git status
+          git diff
+          ls -la
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
