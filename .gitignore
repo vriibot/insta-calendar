@@ -2,5 +2,11 @@
 .coverage
 __pycache__
 session.json
-test_*.txt
-test_*.csv
+config.json
+/test_*.txt
+/test_*.csv
+/test_*.json
+site/_site
+site/.*
+dev/
+.pytest_cache

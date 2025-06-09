@@ -25,6 +25,12 @@ def test_login():
     assert miner.LOGIN == True
 
 def test_mine_bad_user():
-    username = "idontexis^^"
+    username = "a"
     user_data = miner.mine_user(username, {})
     assert len(list(user_data.keys())) == 0
+
+# def test_mine_user():
+#     credentials.load_credentials()
+#     username = "instagram"
+#     user_data = miner.mine_user(username, {})
+#     assert user_data["user_id"] == '25025320'

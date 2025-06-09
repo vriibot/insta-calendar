@@ -5,6 +5,8 @@ import json
 
 
 from .users import *
+from .posts import *
+from . import config
 from . import credentials
 
 cl = Client()
@@ -31,7 +33,8 @@ def login():
 
       try:
             cl.get_timeline_feed()
-      except Exception:
+      except Exception as e:
+         print("session fail", e)
          # logger.info("Session is invalid, need to login via username and password")
 
          old_session = cl.get_settings()
@@ -50,6 +53,71 @@ def login():
       cl.dump_settings(credentials.SESSION_PATH)
    LOGIN = True
 
+def process_media(m, username, user_id):
+    '''
+    Convert to JSON.
+    '''
+    post = {
+        'media_id': m.id, #includes user id
+        'username': username,
+        'code':m.code,
+        'post_date': m.taken_at.isoformat(), #datetime
+        'media_type':m.media_type,
+        'image_versions2': m.image_versions2,
+        # 'product_type': m.product_type,
+        # 'thumbnail_url': #httpURL
+        # 'location': m.location, #location
+        # 'user': {
+        #     'pk': m.user.pk,
+        #     'username': m.user.username,
+        #     'full_name': m.user.fullname,
+        #     'profile_pic_url': #httpUrl
+        #     'profile_pic_url_hd' :
+        #     'is_private': m.user.is_private,
+        # },
+        'description': m.caption_text,
+        'alt_text':m.accessibility_caption,
+      #   'user_tags': m.user_tags,
+        # 'sponser_tags': m.sponser_tags,
+        # 'video_url': m.video_url,
+        'resources': []
+    }
+    for r in m.resources:
+       post['resources'].append({
+          'media_type': r.media_type,
+          'thumbnail_url':  str(r.thumbnail_url)
+       })
+    return post
+
+def get_user_media(user):
+   login()
+   posts = []
+   user_id = USERS[user]["user_id"]
+
+   #get end point
+   end = None
+   if config.options['last_run']: end = config.options['last_run']
+   elif config.options['start_date']: end = config.options['start_date']
+   if config.options['ignore_last_run']: end= None
+
+   finished = False
+   cursor = None
+   while(not finished):
+      print("run loop", cursor, end, config.options["posts_per_page"])
+      medias, cursor = cl.user_medias_paginated(user_id, config.options["posts_per_page"], cursor)
+
+      for m in medias:
+         if end and m.taken_at <= end:
+            finished=True
+            break
+         p = process_media(m, user, user_id)
+         posts.append(p)
+      if cursor == "": 
+         finished = True
+         break
+   json.dump(posts, open("data/media_example.json", "w", encoding="utf-8"))
+   return posts
+
 
 def mine_user(username, user_data):
    login()
@@ -64,44 +132,7 @@ def mine_user(username, user_data):
    user_data["full_name"] = info["full_name"]
    user_data["is_private"] = info["is_private"]
    user_data["profile_pic_url"] = str(info["profile_pic_url"])
-   return
-
-def get_user_media(cl, user):
-    posts = []
-    user_id = USERS[user]["user_id"]
-    medias = cl.user_medias(user_id, 10)
-    for m in medias:
-        print(m)
-        p = process_media(m)
-        posts.append(p)
-    json.dump(posts, open("data/media_example.json", "w", encoding="utf-8"))
-
-def process_media(m):
-    post = {
-        'pk': m.pk,
-        'id': m.id,
-        'code':m.code,
-        'taken_at': m.taken_at.timestamp(), #datetime
-        'media_type':m.media_type,
-        'image_versions2': m.image_versions2,
-        # 'product_type': m.product_type,
-        # 'thumbnail_url': #httpURL
-        # 'location': m.location, #location
-        # 'user': {
-        #     'pk': m.user.pk,
-        #     'username': m.user.username,
-        #     'full_name': m.user.fullname,
-        #     'profile_pic_url': #httpUrl
-        #     'profile_pic_url_hd' :
-        #     'is_private': m.user.is_private,
-        # },
-        'caption_text': m.caption_text,
-        'accessibility_caption':m.accessibility_caption,
-        # 'user_tags': m.user_tags,
-        # 'sponser_tags': m.sponser_tags,
-        # 'video_url': m.video_url,
-    }
-    return post
+   return user_data
 
 def mine_users(usernames):
    for username in usernames:
@@ -109,10 +140,13 @@ def mine_users(usernames):
       user_data = dict.fromkeys(USERS_KEYS)
       if username in USERS:
          user_data = USERS[username]
+      
+      user_data['username'] = username
 
       #do we need to update?
       if not user_data["user_id"] or not user_data['full_name']:
          user_data = mine_user(username, user_data)
+         USERS[username] = user_data
 
 def update_users():
    usernames = get_usernames()
@@ -121,6 +155,36 @@ def update_users():
    write_users()
    return
 
+def download_photo(url, name, path):
+   login()
+   cl.photo_download_by_url(url, name, path)
+
+def mine_posts():
+   get_posts()
+   posts = []
+   for user in USERS:
+      if USERS[user]["is_private"] == "False":
+         posts += get_user_media(user)
+   filtered_posts = filter_posts(posts)
+   for p in filtered_posts:
+      if p['media_id'] in POSTS: 
+         continue
+      download_photo(p['first_image'], p['code'], IMAGE_DIR)
+      POSTS[p["media_id"]] = {
+         "media_id" : p['media_id'],
+         "username" : p["username"],
+         "post_date" : p['post_date'],
+         "code" : p['code'],
+         'description': json.dumps(p['description']),
+         'alt_text': json.dumps(p['alt_text']),
+         'event_date': p['event_date'],
+         # 'image_url': p['first_image'] #temporary link
+      } 
+   # print(POSTS.keys())
+   
+
 def update_posts():
    update_users()
+   mine_posts()
+   write_posts()
    return 
