@@ -1,0 +1,49 @@
+name: mine
+
+on: workflow_dispatch
+
+permissions:
+  contents: read
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Do session
+        uses: mobiledevops/secret-to-file-action@v1
+        with:
+          base64-encoded-secret: ${{ secrets.SESSION }}
+          filename: "session.json"
+          is-executable: false
+          working-directory: "data"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Python script
+        run: python main.py
+        env:
+          INSTAGRAM_USERNAME: ${{ secrets.USERNAME }}
+          INSTAGRAM_PASSWORD: ${{ secrets.PASSWORD }}
+          PROXY_USERNAME: ${{ secrets.PROXY_USERNAME }}
+          PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+          PROXY_COUNTRY: ${{ secrets.PROXY_COUNTRY }}
+          PROXY_HOST_PORT: ${{ secrets.PROXY_HOST_PORT }}
+  
+      - name: Update
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git add .
+          git push origin deploy
