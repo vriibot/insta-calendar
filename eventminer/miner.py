@@ -103,7 +103,7 @@ def get_user_media(user):
    finished = False
    cursor = None
    while(not finished):
-      print("run loop", cursor, end, config.options["posts_per_page"])
+      # print("run loop", cursor, end, config.options["posts_per_page"])
       medias, cursor = cl.user_medias_paginated(user_id, config.options["posts_per_page"], cursor)
 
       for m in medias:
@@ -163,7 +163,7 @@ def mine_posts():
    get_posts()
    posts = []
    for user in USERS:
-      if USERS[user]["is_private"] == "False":
+      if USERS[user]["is_private"] == False:
          posts += get_user_media(user)
    filtered_posts = filter_posts(posts)
    for p in filtered_posts:

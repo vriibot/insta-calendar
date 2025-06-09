@@ -2,6 +2,7 @@
 Handles the reading and writing of user data files and their objects.
 """
 import csv
+import json
 from os import path
 
 USERS_PATH = "data/users.csv"
@@ -30,6 +31,7 @@ def get_users():
     with open(USERS_PATH, newline='', encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
+            row["is_private"] = json.loads(row["is_private"].lower())
             USERS[row["username"]] = row
     return USERS
 
