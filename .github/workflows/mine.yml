@@ -47,4 +47,4 @@ jobs:
           author_name:  "github-actions"
           author_email: "github-actions@users.noreply.github.com"
           message: "Auto-generated files from script"
-          add: "data"
+          add: "['data', 'assets']"

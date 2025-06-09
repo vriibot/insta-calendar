@@ -115,7 +115,7 @@ def get_user_media(user):
       if cursor == "": 
          finished = True
          break
-   json.dump(posts, open("data/media_example.json", "w", encoding="utf-8"))
+   # json.dump(posts, open("data/media_example.json", "w", encoding="utf-8"))
    return posts
 
 
