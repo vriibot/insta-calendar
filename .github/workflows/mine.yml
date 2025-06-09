@@ -3,7 +3,8 @@ name: mine
 on: workflow_dispatch
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 jobs:
   run_script:
@@ -41,9 +42,22 @@ jobs:
           PROXY_COUNTRY: ${{ secrets.PROXY_COUNTRY }}
           PROXY_HOST_PORT: ${{ secrets.PROXY_HOST_PORT }}
   
-      - name: Update
+      - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@users.noreply.github.com"
+          git checkout -b autogen/update-files
           git add .
-          git push origin deploy
+          git diff --cached --quiet || git commit -m "Auto-generated files from script"
+          git push --force --set-upstream origin autogen/update-files
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Auto-generated files from script"
+          branch: autogen/update-files
+          base: deploy
+          title: "Automated update of generated files"
+          body: |
+            This PR includes auto-generated files from the GitHub Action run.
