@@ -31,7 +31,9 @@ def get_users():
     with open(USERS_PATH, newline='', encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            row["is_private"] = json.loads(row["is_private"].lower())
+            if(row["is_private"].lower() == "true"): row["is_private"] = True
+            else:
+                row["is_private"] = False
             USERS[row["username"]] = row
     return USERS
 
