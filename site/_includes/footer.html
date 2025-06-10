@@ -1,0 +1,44 @@
+{%- assign default_paths = site.pages | map: "path" -%}
+{%- assign page_paths = site.header_pages | default: default_paths -%}
+
+<footer class="site-footer h-card">
+
+  <div class="wrapper">
+    <ul class="footer-links">
+      <li>{{ site.title }}</li>
+      {%- for entry in site.footer_links -%}
+        {% if entry.user_title != blank? %}
+          <li>
+            <a rel="me" href="{{ entry.user_url }}">{{entry.user_title}}</a>
+          </li>
+        {% endif %}
+      {%- endfor -%}
+    </ul>
+    <!-- <h2 class="footer-heading">{{ site.title }}</h2>
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        {%- include social/meta.html -%}
+      </div>
+      <div class="footer-col">
+        <p>{{ site.description | escape }}</p>
+        <p>
+          {% if site.github.versions.github-pages %}
+          <a href="https://pages.github.com/">GH Pages</a> {{ site.github.versions.github-pages | default: 1.0 }},
+          {% endif %}
+          <a href="https://jekyllrb.com/">Jekyll</a> {{ jekyll.version | site.github.versions.jekyll | default: 1.0 }},
+          {% if site.theme_version %}
+          <a href="https://github.com/JakeSteam/minimaJake">minimaJake</a> {{ site.theme_version }}.
+          {% else %}
+          <a href="https://github.com/JakeSteam/minimaJake">minimaJake</a> {{ site.remote_theme | split: '@' | last | replace: 'JakeSteam/minimaJake', 'latest'}}.
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="social-links">
+      {%- include social/social.html -%}
+    </div> -->
+
+  </div>
+
+</footer>

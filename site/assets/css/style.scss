@@ -1,0 +1,257 @@
+---
+---
+
+@import
+  "minima/skins/{{ site.minima.skin | default: 'classic' }}",
+  "minima/initialize";
+
+$accent-color: {{ site.accent_colour }};
+
+/* Misc tidying of overall layout */
+.content {
+  padding: 15px;
+}
+
+.site-header {
+  border-top: 0px;
+}
+
+.card {
+  border: 1px solid {{ site.accent_colour }};
+  border-radius: .25rem;
+}
+
+.bg-img {
+  height: 180px;
+  border-radius: .17rem;
+  display: block;
+  overflow: hidden;
+}
+
+.bg-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-title {
+  line-height: 1.3;
+}
+
+.post-header .bg-img {
+  border: 1px solid {{ site.accent_colour }};
+}
+
+.centred-content {
+  margin: auto;
+  text-align: center;
+}
+
+blockquote {
+  text-indent: -35px !important;
+  padding-left: 50px !important;
+}
+
+/* Makes the meta info pretty */
+.contact-list li+li {
+  padding-top: 5px;
+}
+
+.contact-list .svg-icon {
+  padding-right: 5px;
+}
+
+.contact-list a:hover {
+  text-decoration: none;
+}
+
+.contact-list a:hover .username {
+  text-decoration: underline;
+}
+
+.svg-icon {
+  fill: #828282;
+}
+
+a:hover .svg-icon {
+  fill: {{ site.accent_colour }};
+}
+
+/* Fixes the in-post indent applying to homepage */
+.homepage-title {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+/* Fixes weird table word break behaviour */
+table {
+  table-layout: fixed;
+  word-break: break-word;
+}
+
+/* Fixes "tag" styling */
+.tag,
+.tag:visited {
+  color: #828282;
+}
+
+/* Fixes icon / username alignment in footer */
+.username,
+.svg-icon {
+    vertical-align: middle;
+}
+
+/* Styles the pagination & link to other blog */
+.centred-homepage-content {
+  width: 100%;
+  text-align: center;
+}
+
+.highlight {
+  background: {{ site.accent_colour }};
+}
+
+/* Adds extra padding to top right links */
+.page-link {
+  padding: 5px;
+}
+
+/* Adds GitHub style links to headers on mouseover */
+.post-content {
+  overflow-wrap: break-word;
+}
+
+h1 .octicon, h2 .octicon, h3 .octicon, h4 .octicon, h5 .octicon, h6 .octicon {
+  visibility: hidden;
+}
+
+h1:hover .octicon, h2:hover .octicon, h3:hover .octicon, h4:hover .octicon, h5:hover .octicon, h6:hover .octicon {
+  visibility: visible;
+}
+
+.octicon {
+  fill: currentColor;
+  padding: 0;
+  vertical-align: middle;
+}
+
+/* Table of contents */
+.toc {
+  float: right;
+  border: 1px solid {{ site.accent_colour }};
+  border-radius: 0.25rem;
+  padding-top: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+  margin-left: 15px;
+}
+
+@media screen and (max-width: $on-medium) {
+  .toc {
+    float: none;
+    margin-left: 0px;
+    margin-bottom: 5px;
+    padding: 15px 10px;
+  }
+}
+
+.toc summary {
+  margin-left: 20px;
+}
+
+.toc ul {
+  list-style: none;
+  margin-left: 10px;
+  margin-bottom: 0px;
+}
+
+.toc li {
+  margin-left: 10px;
+}
+
+/* Search page */
+#search-input {
+  font-size: 30px;
+  display: block;
+  width: 400px
+}
+
+/* Site picker */
+.site-picker {
+  line-height: 26px;
+  border-bottom: 5px solid {{ site.accent_colour }};
+  text-align: center;
+}
+
+.site-tile {
+  position: relative;
+  padding: 3.5px 10px 3px 10px;
+  color: #ffffff !important;
+  white-space: nowrap;
+}
+
+.site-tile span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.site-tile .current {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 95%);
+}
+
+.site-tile .others {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.site-tile .text {
+  position: relative;
+  z-index: 2;
+}
+
+/* Outdated content warning */
+.outdated-warning {
+  padding: 0.75rem 1rem;
+  border: 1px solid {{ site.accent_colour }};
+  border-radius: 0.25rem;
+}
+
+/* Calendar */
+.calendar-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.calendar-month {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 2rem);
+  line-height: 1.5rem;
+  text-align: center;
+}
+
+.calendar-event {
+  color: {{ site.accent_colour }};
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.calendar-event:hover {
+  color: lighten({{ site.accent_colour }}, 10%);
+}
+
+@import "custom";

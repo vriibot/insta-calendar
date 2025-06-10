@@ -18,3 +18,7 @@ Place instagram usernames in the username.txt file, one per line.
 | last_run | Stores the last run. You can overwrite this or set to null.
 
 The API mines backwards from the most recent post, so setting an earlier start date while maintaining the last run does nothing.
+
+# GitHub Action Automation
+
+Go to Settings > Actions > General, scroll to Workflow permissions and set to "Read and write permissions" and "Allow GitHub Actions to create and approve pull requests"

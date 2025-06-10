@@ -1,0 +1,141 @@
+#searchform{
+  text-align: center;
+}
+
+.post{
+  max-width: 740px;
+  margin: auto;
+}
+
+#search-input {
+  font-size: 15px;
+  display: block;
+  width: 100%; 
+  background-color: transparent;
+  color: $text-color;
+  border-radius: 2pt;
+  margin:auto;
+  max-width: 738px;
+  border: 1px solid;
+  padding: 15px 10px;
+}
+
+#search-input::placeholder {
+  color: $text-color;
+  opacity: 0.8;
+}
+
+#searchresults{
+  max-width: 738px;
+  margin:auto;
+}
+
+.calendar-container {
+  margin-bottom: 2rem;
+  justify-items: center;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 290px);
+}
+
+.calendar-month{
+    min-height: calc(308px - 2rem);
+    padding: 1rem 2rem;
+}
+
+.calendar-grid{
+  line-height: 2rem;
+}
+
+.calendar-event:hover{
+  background-color:$text-color;
+  border-radius: 50px;
+}
+
+.focused-date{
+  background-color:$text-color;
+  border-radius: 50px;
+}
+
+.calendar-controls {
+  color: $text-color;
+  border-radius: 5px;
+  border: 1px solid $text-color;
+  height: 34px;
+  width: 50px;
+  left: 0;
+  right: 0;
+  position: relative;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.calendar-controls button{
+  display:inline-block;
+  background-color: transparent;
+  color:  $text-color;
+  border: none;
+  font-size: 25px;
+}
+
+.calendar-controls button:hover{
+  color:  #fff
+}
+
+#filteredResults{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(320px, calc(33% - 1rem)), 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+.page-content .wrapper{
+  max-width: 1400px;
+}
+
+
+#filteredResults .card{
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  max-width: 738px;
+  min-width: 320px;
+  width: 100%;
+}
+
+.tag-container{
+  max-width: 740px;
+  margin:auto;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-links {
+  list-style: none;
+  display: inline;
+  text-transform: uppercase;
+}
+
+.footer-links a{
+  color: $accent-color;
+}
+
+footer .wrapper{
+  // max-width: 100%;
+  // padding: 0;
+}
+
+.footer-links li{
+  display: inline;
+  margin-right: 10px;
+}
+
+.tag-container a{
+  color: $accent-color;
+}
+
+.tag-container code{
+  border-color: $accent-color;
+  background-color: var(--minima-background-color);
+  padding: 2px 10px;
+  margin: 0px 1px;
+}

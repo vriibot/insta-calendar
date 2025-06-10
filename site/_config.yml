@@ -1,0 +1,64 @@
+# Basic site setup
+remote_theme: JakeSteam/minimaJake
+title: insta-calendar
+description: It's a calendar blog for events.
+accent_colour: "#ff0000"
+# url: https://history.jakelee.co.uk
+future: true
+
+collections:
+  posts:
+    output: true
+    permalink: /p/:title
+
+month_display: 2
+month_columns: 2
+
+# Setting article defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+author:
+  name: vriibot
+  url: 'https://vriibot.com'
+
+footer_links:
+  - { user_title: 'About', user_url: '/about'}
+  - { user_title: 'GitHub', user_url: "https://github.com/vriibot"}
+  - { user_title: "RSS Feed", user_url: "/feed.xml" }
+
+# Social / dark mode settings
+minima:
+  skin: auto
+  social_links:
+    - { platform: github, user_url: "https://github.com/vriibot" }
+    - {
+        platform: code,
+        user_url: "https://github.com/vriibot/insta-calendar",
+        user_title: "vriibot/insta-calendar",
+      }
+    - { platform: rss, user_url: "/feed.xml", user_title: "RSS Feed" }
+
+###
+# Below here probably doesn't need changing #
+###
+
+# Site settings
+permalink: /:title/
+show_excerpts: true
+timezone: Europe/London
+
+# Build settings
+plugins:
+  - jekyll-feed
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-webp
+
+# Pagination settings
+paginate: 10
+paginate_path: page/:num/
