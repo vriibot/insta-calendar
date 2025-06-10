@@ -42,11 +42,11 @@ jobs:
           PROXY_COUNTRY: ${{ secrets.PROXY_COUNTRY }}
           PROXY_HOST_PORT: ${{ secrets.PROXY_HOST_PORT }}
       - name: Create PR
+        uses: peter-evans/create-pull-request@v7
         with:
-          uses: peter-evans/create-pull-request@v7
           commit-message: Update Posts
           branch: action/update-posts
-          title: "Automated update of generated files"
+          title: "Update Posts"
           body: |
             This PR includes auto-generated files from the GitHub Action run.
           
