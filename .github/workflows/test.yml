@@ -6,14 +6,14 @@ on:
     paths-ignore:
       - 'README.md'
       - 'data/**'
-      - 'site'
+      - 'site/**'
       - '.github/workflows/**'
   pull_request:
     branches: [ "main" ]
     paths-ignore:
       - 'README.md'
       - 'data/**'
-      - 'site'
+      - 'site/**'
       - '.github/workflows/**'
 
 permissions:
