@@ -16,8 +16,10 @@ jobs:
       cancel-in-progress: false
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: deploy
       - name: Rebase
         run: |
-          git checkout deploy
           git rebase master 
           git push origin deploy
