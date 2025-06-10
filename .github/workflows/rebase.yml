@@ -19,6 +19,6 @@ jobs:
       - name: git-rebase
         uses: tiacsys/git-rebase@v1
         with:
-          repo: "${{ github.repository }}"
+          repo: "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           source_branch: "main"
           destination_branch: "deploy"
