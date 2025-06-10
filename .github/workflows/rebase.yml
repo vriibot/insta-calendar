@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Rebase
-      - run: |
+        run: |
           git checkout deploy
           git rebase master 
           git push origin deploy
