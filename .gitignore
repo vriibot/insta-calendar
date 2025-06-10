@@ -2,7 +2,6 @@
 .coverage
 __pycache__
 session.json
-config.json
 /test_*.txt
 /test_*.csv
 /test_*.json
