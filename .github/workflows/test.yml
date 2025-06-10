@@ -13,8 +13,8 @@ on:
     paths-ignore:
       - 'README.md'
       - 'data/**'
-      - 'site'
-      - 'workflows'
+      - 'site/**'
+      - 'workflows/**'
 
 permissions:
   contents: read
