@@ -41,10 +41,12 @@ jobs:
           PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
           PROXY_COUNTRY: ${{ secrets.PROXY_COUNTRY }}
           PROXY_HOST_PORT: ${{ secrets.PROXY_HOST_PORT }}
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v7
+      - name: Create PR
         with:
-          author_name:  "github-actions"
-          author_email: "github-actions@users.noreply.github.com"
-          message: "Auto-generated files from script"
-          add: "['data', 'assets']"
+          uses: peter-evans/create-pull-request@v7
+          commit-message: Update Posts
+          branch: action/update-posts
+          title: "Automated update of generated files"
+          body: |
+            This PR includes auto-generated files from the GitHub Action run.
+          
