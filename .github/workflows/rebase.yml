@@ -16,10 +16,9 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - uses: actions/checkout@v4
+      - name: git-rebase
+        uses: tiacsys/git-rebase@v3
         with:
-          ref: deploy
-      - name: Rebase
-        run: |
-          git rebase main
-          git push origin deploy
+          repo: "."
+          source_branch: "main"
+          destination_branch: "deploy"
