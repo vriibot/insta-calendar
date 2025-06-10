@@ -7,14 +7,12 @@ on:
       - 'README.md'
       - 'data/**'
       - 'site'
-      - '.github/workflows/**'
   pull_request:
     branches: [ "main" ]
     paths-ignore:
       - 'README.md'
       - 'data/**'
-      - 'site/**'
-      - '.github/workflows/**'
+      - 'site'
 
 permissions:
   contents: read
