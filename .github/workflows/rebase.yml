@@ -16,16 +16,8 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: deploy
-
-      - name: Rebase deploy
-        uses: martincostello/rebaser@v1
-        id: rebase
-
-      - name: Push changes
-        if : ${{ steps.rebase.outputs.result == 'success' }}
-        run: git push --force-with-lease origin deploy
+      - name: Rebase
+      - run: |
+          git checkout deploy
+          git rebase master 
+          git push origin deploy
