@@ -8,6 +8,7 @@ on:
       - 'data/**'
       - 'site/**'
       - '.github/workflows/**'
+      - '.gitignore'
   pull_request:
     branches: [ "main" ]
     paths-ignore:
@@ -15,6 +16,7 @@ on:
       - 'data/**'
       - 'site/**'
       - '.github/workflows/**'
+      - '.gitignore'
 
 permissions:
   contents: read
