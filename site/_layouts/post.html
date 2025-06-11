@@ -20,7 +20,7 @@ layout: default
       {% endif %}
       <ul class="tag-container">
         {% for tag in page.tags %}
-          <a href="/search/?q={{tag}}"><code class="highligher-rouge"><nobr>{{ tag }}</nobr></code></a>
+          <a href="{{'/search/' | relative_url}}?q={{tag}}"><code class="highligher-rouge"><nobr>{{ tag }}</nobr></code></a>
         {% endfor %}
       </ul>
     </p>

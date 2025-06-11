@@ -9,3 +9,4 @@ site/_site
 site/.*
 dev/
 .pytest_cache
+/site/Gemfile.lock

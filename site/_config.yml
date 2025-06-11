@@ -6,6 +6,9 @@ accent_colour: "#ff0000"
 # url: https://history.jakelee.co.uk
 future: true
 
+baseurl: /insta-calendar
+url: https://vriibot.github.io/insta-calendar
+
 collections:
   posts:
     output: true

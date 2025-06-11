@@ -9,7 +9,7 @@
       {%- for entry in site.footer_links -%}
         {% if entry.user_title != blank? %}
           <li>
-            <a rel="me" href="{{ entry.user_url }}">{{entry.user_title}}</a>
+            <a rel="me" href="{{ entry.user_url | relative_url }} ">{{entry.user_title}}</a>
           </li>
         {% endif %}
       {%- endfor -%}

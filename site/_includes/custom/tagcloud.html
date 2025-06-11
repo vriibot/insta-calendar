@@ -19,7 +19,7 @@
     {% endif %}
   {% assign tagitems = temptag | split: '#' %}
   {% capture tagname %}{{ tagitems[1] }}{% endcapture %}
-  <a href="/search/?q={{tagname}}"><code class="highligher-rouge"><nobr>{{ tagname }}</nobr></code></a>
+  <a href="{{'/search/' | relative_url }}?q={{tagname}}"><code class="highligher-rouge"><nobr>{{ tagname }}</nobr></code></a>
   {% assign i = i | sum: 1 %}
 {% endfor %}
 </ul>

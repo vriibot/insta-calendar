@@ -12,39 +12,38 @@
   {%- endif -%}
 
   {% if site.theme_version %}
-  <link rel="stylesheet" href="/assets/css/style.css?v={{ site.theme_version }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.theme_version }}">
   {% else %}
     {% assign current_year = "now" | date: "%Y" %}
     {% assign current_week = "now" | date: "%V" %}
     {% assign year_week_string = current_year | append: "-" | append: current_week %}
-    <link rel="stylesheet" href="/assets/css/style.css?v={{ site.remote_theme | split: '@' | last | replace: 'JakeSteam/minimaJake', year_week_string}}">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.remote_theme | split: '@' | last | replace: 'JakeSteam/minimaJake', year_week_string}}">
   {% endif %}
   <link
     rel="apple-touch-icon"
     sizes="180x180"
-    href="/assets/images/icon/apple-touch-icon.png"
+    href="{{'/assets/images/icon/apple-touch-icon.png' | relative_url }}"
   >
   <link
     rel="icon"
     type="image/png"
     sizes="32x32"
-    href="/assets/images/icon/favicon-32x32.png"
+    href="{{'/assets/images/icon/favicon-32x32.png' | relative_url }}"
   >
   <link
     rel="icon"
     type="image/png"
     sizes="16x16"
-    href="/assets/images/icon/favicon-16x16.png"
+    href="{{'/assets/images/icon/favicon-16x16.png' | relative_url }}"
   >
-  <link rel="manifest" href="/assets/images/icon/site.webmanifest">
-  <link rel="shortcut icon" href="/assets/images/icon/favicon.ico">
+  <link rel="manifest" href="{{'/assets/images/icon/site.webmanifest' | relative_url }}">
+  <link rel="shortcut icon" href="{{'/assets/images/icon/favicon.ico' | | relative_url }}">
   <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="msapplication-config" content="/assets/images/icon/browserconfig.xml">
+  <meta name="msapplication-config" content="{{'/assets/images/icon/browserconfig.xml' | relative_url }}">
   <meta name="theme-color" content="#ffffff">
-  <link rel="manifest" href="/assets/images/icon/site.webmanifest">
   {%- feed_meta -%} {%- if jekyll.environment == 'production' and
   site.google_analytics -%} {%- include google-analytics.html -%} {%- endif -%}
   {% if site.open_external_links_in_new_tab != false %}
-  <script src="/assets/js/new_window.js" defer></script>
+  <script src="{{'/assets/js/new_window.js' | relative_url }}" defer></script>
   {% endif %}
 </head>

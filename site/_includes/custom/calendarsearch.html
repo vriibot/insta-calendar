@@ -111,7 +111,7 @@
 <ul id="filteredResults" class="post-list"></ul>
 
 
-<script src="/assets/js/datefilter.js" type="text/javascript"></script>
+<script src="{{'/assets/js/datefilter.js' | relative_url }}" type="text/javascript"></script>
 
 <script>
 
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var sjs = DateFilter({
     resultsContainer: document.getElementById("filteredResults"),
-    json: "/assets/js/posts.json",
+    json: "{{'/assets/js/posts.json' | relative_url }}",
     templateMiddleware: function (prop, value, template) {
       if (prop === "title" || prop === "excerpt") {
         value = value.replace(/&amp;/g, "&");
@@ -184,13 +184,13 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     searchResultTemplate:
       "<li class='card'>" +
-        "<a class='post-link' href='{url}'>" +
+        "<a class='post-link' href='{{site.baseurl}}{url}'>" +
             "<img src='{image}'/>"+
         "</a>" +
      "</div>" +
       "<div class='content'>" +
         '<h3>' +
-            "<a class='post-link' href='{url}'>{title}</a>" +
+            "<a class='post-link' href='{{site.baseurl}}{url}'>{title}</a>" +
         '</h3>' +
       "<span class='post-meta'>{date} • {tags}</span>" +
       "<p>{excerpt}</p>" +
