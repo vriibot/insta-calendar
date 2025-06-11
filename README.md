@@ -22,3 +22,5 @@ The API mines backwards from the most recent post, so setting an earlier start d
 # GitHub Action Automation
 
 Go to Settings > Actions > General, scroll to Workflow permissions and set to "Read and write permissions" and "Allow GitHub Actions to create and approve pull requests"
+
+Go to Settings > Environments > "github-pages", then change the allowed branch.
