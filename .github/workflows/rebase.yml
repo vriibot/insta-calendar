@@ -34,7 +34,7 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'deploy.yml', // or workflow file name
+              workflow_id: 'jekyll.yml', // or workflow file name
               ref: 'deploy', // IMPORTANT: this is the branch with the workflow file
               inputs: {
                 branch: 'deploy' // optional input if needed
