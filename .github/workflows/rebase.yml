@@ -22,3 +22,7 @@ jobs:
           repo: "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           source_branch: "deploy"
           destination_branch: "main"
+  deploy:
+    uses: ./.github/workflows/jekyll.yml
+    with:
+      branch: 'deploy'
