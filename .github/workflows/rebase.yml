@@ -26,8 +26,6 @@ jobs:
           destination_branch: "main"
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Trigger deploy.yml
-        uses: ./.github/workflows/deploy.yml@deploy
-        with:
-          secrets: inherit
+    uses: ./.github/workflows/deploy.yml@deploy
+    with:
+      secrets: inherit
