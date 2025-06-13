@@ -28,15 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger deploy.yml
-        uses: actions/github-script@v7
+        uses: ./.github/workflows/deploy.yml@deploy
         with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'jekyll.yml', // or workflow file name
-              ref: 'deploy', // IMPORTANT: this is the branch with the workflow file
-              inputs: {
-                branch: 'deploy' // optional input if needed
-              }
-            });
+          secrets: inherit
