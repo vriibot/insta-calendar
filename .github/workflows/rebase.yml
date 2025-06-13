@@ -21,11 +21,6 @@ jobs:
       - name: git-rebase
         uses: tiacsys/git-rebase@v1
         with:
-          repo: "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          repo: "https://${{ github.actor }}:${{ secrets.MY_TOKEN }}@github.com/${{ github.repository }}.git"
           source_branch: "deploy"
           destination_branch: "main"
-  deploy:
-    runs-on: ubuntu-latest
-    uses: ./.github/workflows/deploy.yml@deploy
-    with:
-      secrets: inherit
