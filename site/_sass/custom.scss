@@ -7,6 +7,18 @@
   margin: auto;
 }
 
+.post a{
+  color: $accent-color;
+}
+
+.card a{
+  color: $accent-color;
+}
+
+.post-meta{
+  display: block;
+}
+
 #search-input {
   font-size: 15px;
   display: block;
@@ -107,6 +119,14 @@
   margin:auto;
   margin-top: -0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.card .tag-container{
+  margin-top: 10px;
+}
+
+.post .tag-container{
+  margin-top: 10px;
 }
 
 .footer-links {

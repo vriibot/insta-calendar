@@ -176,6 +176,19 @@ document.addEventListener('DOMContentLoaded', function() {
       if (prop === "url" || prop === "image") {
         return value;
       }
+      if (prop === "tags"){
+        tags = value.split(",");
+        formatted_tags = ""
+        search_url = "{{'/search/' | relative_url}}?q="
+        for(var tagname of tags){
+          formatted_tags += "<a href='" + search_url + tagname + "'><code class='highlighter-rouge'><nobr>"+tagname+"</nobr></code></a>\n"
+        }
+        return formatted_tags
+      }
+      if(prop=="source"){
+        if(!value) return ""
+        return "<span class='post-meta'><i class='fa fa-external-link' aria-hidden='true'></i> <a href='"+value+"'>Source</a></span>"
+      }
     },
     sortMiddleware: function (a, b) {
       aPrio = new Date(a['date'])
@@ -184,16 +197,17 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     searchResultTemplate:
       "<li class='card'>" +
-        "<a class='post-link' href='{{site.baseurl}}{url}'>" +
-            "<img src='{image}'/>"+
-        "</a>" +
-     "</div>" +
+      "<a class='post-link' href='{{site.baseurl}}{url}'>" +
+          "<img src='{image}'/>"+
+      "</a>" +
       "<div class='content'>" +
         '<h3>' +
             "<a class='post-link' href='{{site.baseurl}}{url}'>{title}</a>" +
         '</h3>' +
-      "<span class='post-meta'>{date} • {tags}</span>" +
-      "<p>{excerpt}</p>" +
+      "<span class='post-meta'><i class='fa fa-calendar' aria-hidden='true'></i> {date}</span>" +
+      "<span class='post-meta'><i class='fa fa-map' aria-hidden='true'></i> <a href='{{'/search/' | relative_url}}?q={author}'>{author}</a></span>"+
+      "{source}"+
+      "<ul class='tag-container'>{tags}</ul>"+
       "</div>" +
       "</li>",
     startDate: selectedDate,
