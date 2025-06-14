@@ -16,7 +16,7 @@ def has_numbers(inputString):
 
 POSTS_PATH = "data/posts.csv"
 POSTS_KEYS = ["media_id", "username", 'post_date', "code", 'description', 'alt_text', 'event_date']
-IMAGE_DIR = "assets"
+IMAGE_DIR = "site/assets/images"
 
 # map of id to post data
 POSTS = {}

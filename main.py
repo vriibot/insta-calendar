@@ -2,6 +2,7 @@ import sys
 import os
 from os import path
 import eventminer
+import pathlib 
 
 def main():
     #handle credentials
@@ -11,7 +12,7 @@ def main():
     eventminer.get_config()
 
     #setup asset folder
-    if not path.exists(eventminer.IMAGE_DIR): os.mkdir(eventminer.IMAGE_DIR)
+    if not path.exists(eventminer.IMAGE_DIR): pathlib.Path(eventminer.IMAGE_DIR).mkdir(parents=True, exist_ok=True) 
 
     #update posts
     eventminer.update_posts()
