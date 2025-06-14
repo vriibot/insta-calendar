@@ -63,7 +63,7 @@ def main():
         for row in reader:
             date_string = str(datetime.fromisoformat(row["event_date"]).date())
             file_name = date_string + "-" + row['media_id'].replace("_", "-") + ".md"
-            # if(path.exists(POSTS_DIR + file_name)): continue
+            if(path.exists(POSTS_DIR + file_name)): continue
             description = json.loads(row["description"])
             title = extract_title(description)
             tags = extract_tags(description)

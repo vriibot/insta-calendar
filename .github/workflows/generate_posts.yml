@@ -1,0 +1,42 @@
+name: mine
+
+on: 
+  push:
+      branches: ["deploy"]
+      paths:
+        - 'data/posts.csv'
+  on: workflow_dispatch
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Run Python script
+        run: python post-maker.py
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: Update Posts
+          branch: action/update-posts
+          title: "Update Posts"
+          body: |
+            This PR includes auto-generated files from the GitHub Action run.
+          
