@@ -6,14 +6,16 @@ layout: none
   {% for post in site.posts %}
     {
       "location" : {{ post.location | jsonify | strip_html}},
+      "author" : {{ post.author | jsonify | strip_html}},
       "location_url" : {{ post.location_url | jsonify | strip_html}},
       "tags"     : "{{ post.tags | join: ', ' }}",
       "title"    : {{ post.title | jsonify | strip_html }},
       "excerpt"  : {{ post.excerpt | jsonify | strip_html }},
       "url"      : "{{ post.url }}",
+      "source"   : {{ post.source | jsonify | strip_html}},
       "date"     : "{{ post.date | date: "%b %-d, %Y" }}",
       "content"  : {{ post.content | jsonify | strip_html }},
-      "image"    : {{ post.image | jsonify | strip_html }}
+      "image"    : {{ post.image | absolute_url | jsonify | strip_html }}
     } {% unless forloop.last %},{% endunless %}
   {% endfor %}
 ]
