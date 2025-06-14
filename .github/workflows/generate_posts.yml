@@ -1,4 +1,4 @@
-name: mine
+name: generate_posts
 
 on: 
   push:
