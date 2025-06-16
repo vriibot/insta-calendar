@@ -15,7 +15,7 @@ layout: none
       "source"   : {{ post.source | jsonify | strip_html}},
       "date"     : "{{ post.date | date: "%b %-d, %Y" }}",
       "content"  : {{ post.content | jsonify | strip_html }},
-      "image"    : {{ post.image | absolute_url | jsonify | strip_html }}
+      "image"    : {{ post.image | jsonify | strip_html }}
     } {% unless forloop.last %},{% endunless %}
   {% endfor %}
 ]

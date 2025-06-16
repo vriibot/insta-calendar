@@ -68,8 +68,9 @@ def main():
             title = extract_title(description)
             tags = extract_tags(description)
             tags = "- " + "\n- ".join(tags)
+            image_dir = "/" + IMAGES_DIR + row["code"] + ".jpg\n"
             file = open(POSTS_DIR + file_name, "w")
-            file.write("---\nauthor: "+ row["username"]+ "\nimage: " + IMAGES_DIR + row["code"] + ".jpg\n" + "title: "+title+"\ndate: " + date_string + "\nsource: 'https:/instagram.com/p/" + row["code"] +"'\ntags:\n" + tags + "\n---\n" + description)
+            file.write("---\nauthor: "+ row["username"]+ "\nimage: " + image_dir + "title: "+title+"\ndate: " + date_string + "\nsource: 'https://instagram.com/p/" + row["code"] +"'\ntags:\n" + tags + "\n---\n" + description)
             file.close()
 
 main()

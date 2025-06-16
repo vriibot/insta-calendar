@@ -174,10 +174,17 @@ document.addEventListener('DOMContentLoaded', function() {
         value = value.replace(/&amp;/g, "&");
       }
       if (prop === "url" || prop === "image") {
+        if(new URL(document.baseURI).origin === new URL(value, document.baseURI).origin){
+          return '{{site.baseurl}}'+value
+        }
+        else{
+          console.log(value)
+        }
+
         return value;
       }
       if (prop === "tags"){
-        tags = value.split(",");
+        tags = value.split(", ");
         formatted_tags = ""
         search_url = "{{'/search/' | relative_url}}?q="
         for(var tagname of tags){
@@ -197,12 +204,12 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     searchResultTemplate:
       "<li class='card'>" +
-      "<a class='post-link' href='{{site.baseurl}}{url}'>" +
+      "<a class='post-link' href='{url}'>" +
           "<img src='{image}'/>"+
       "</a>" +
       "<div class='content'>" +
         '<h3>' +
-            "<a class='post-link' href='{{site.baseurl}}{url}'>{title}</a>" +
+            "<a class='post-link' href='{url}'>{title}</a>" +
         '</h3>' +
       "<span class='post-meta'><i class='fa fa-calendar' aria-hidden='true'></i> {date}</span>" +
       "<span class='post-meta'><i class='fa fa-map' aria-hidden='true'></i> <a href='{{'/search/' | relative_url}}?q={author}'>{author}</a></span>"+
