@@ -9,6 +9,15 @@ future: true
 baseurl: /insta-calendar
 url: https://vriibot.github.io/insta-calendar
 
+
+#langauge settings for language toggle
+lang: en
+lang_toggle: 
+  enabled: true
+  languages:
+    - { code: 'en', name: 'English'}
+    - { code: 'ja', name: '日本語'}
+
 collections:
   posts:
     output: true

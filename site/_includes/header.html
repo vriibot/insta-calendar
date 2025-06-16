@@ -16,8 +16,8 @@
   <div class="site-header">
       <div class="wrapper">
             <a href="{{ '/'' | relative_url }}">
-        <img class="avatar" src="{{'/assets/images/icon/favicon-32x32.png'| relative_url}}"/>
-      </a>
+              <img class="avatar" src="{{'/assets/images/icon/favicon-32x32.png'| relative_url}}"/>
+            </a>
       {%- assign default_paths = site.pages | map: "path" -%}
       {%- assign page_paths = site.header_pages | default: default_paths -%}
       {%- assign titles_size = site.pages | map: 'title' | join: '' | size -%}
@@ -44,6 +44,7 @@
           </div>
         </nav>
       {%- endif -%}
+      {% include custom/langtoggle.html %}
     </div>
   </div>
 </header>

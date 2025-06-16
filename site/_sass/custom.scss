@@ -169,3 +169,26 @@ footer .wrapper{
   height: 32px;
   background: $text-color;
 }
+
+.langtoggle {
+  position: absolute;
+  right:0;
+  margin:10px;
+}
+
+select, ::picker(select) {
+  appearance: base-select;
+}
+
+select {
+  border: 2px solid #ddd;
+  background: #eee;
+  padding: 8px;
+  transition: 0.4s;
+}
+
+select:hover,
+select:focus {
+  background: #ddd;
+}
+

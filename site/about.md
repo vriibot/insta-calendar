@@ -1,5 +1,6 @@
 ---
 title: About
+title_ja: サイトについて
 permalink: /about/
 layout: page
 ---

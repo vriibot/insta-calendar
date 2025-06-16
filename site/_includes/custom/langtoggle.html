@@ -1,0 +1,35 @@
+<script>
+var default_lang = '{{site.lang}}';
+var stored_lang = sessionStorage.getItem("lang");
+var lang = default_lang;
+if(stored_lang) lang = stored_lang;
+
+async function setLang(newLang) {
+    if (newLang === lang) return;
+    sessionStorage.setItem("lang", newLang)
+    lang = newLang;
+}
+
+function bindLangSwitcher(initialValue) {
+  const switcher = document.querySelector("[data-i18n-switcher]");
+  switcher.value = initialValue;
+  switcher.onchange = (e) => {
+    // Set the locale to the selected option[value]
+    setLang(e.target.value);
+  };
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    setLang(lang)
+    bindLangSwitcher(lang)
+});
+
+</script>
+
+{% if site.lang_toggle.enabled %}
+    <select data-i18n-switcher class="langtoggle">
+        {% for l in site.lang_toggle.languages |  %}
+            <option value="{{l.code}}">{{l.name}}</option>
+        {% endfor %}
+    </select>
+{% endif %}
