@@ -3,6 +3,8 @@
 var default_lang = '{{site.lang}}';
 var stored_lang = sessionStorage.getItem("lang");
 var lang = default_lang;
+if(stored_lang) lang = stored_lang;
+
 
 
 var available_languages = [
@@ -126,8 +128,7 @@ function bindLangSwitcher(initialValue) {
 }
 
 window.translate = function(){
-    var new_lang = default_lang;
-    if(stored_lang) new_lang = stored_lang;
+    var new_lang = lang;
     setLang(new_lang)
     return new_lang;
 }
