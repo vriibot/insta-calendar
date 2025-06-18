@@ -7,7 +7,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  run_script:
+  run_scripts:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,7 +32,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Python script
+      - name: Run Python script mine
         run: python main.py
         env:
           INSTAGRAM_USERNAME: ${{ secrets.USERNAME }}
