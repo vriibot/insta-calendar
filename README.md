@@ -36,7 +36,12 @@ You can also exlcude tags from step one using `-YOUR_TAG`.
 
 The API mines backwards from the most recent post, so setting an earlier start date while maintaining the last run does nothing.
 
-# GitHub Action Automation
+## Website settings
+
+### Language toggle
+Some basic client side translation is available. Define strings in `assets/js/strings_<lang>.json`. You can also define patterns. The general idea is to provide localisation of UI elements (where bilingual content is not really feasible) without generating two versions of the website.
+
+## GitHub Action Automation
 
 Go to Settings > Actions > General, scroll to Workflow permissions and set to "Read and write permissions" and "Allow GitHub Actions to create and approve pull requests"
 
