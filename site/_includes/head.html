@@ -12,7 +12,7 @@
   {%- endif -%}
 
   {% if site.theme_version %}
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.theme_version }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   {% else %}
     {% assign current_year = "now" | date: "%Y" %}
     {% assign current_week = "now" | date: "%V" %}
