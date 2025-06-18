@@ -1,10 +1,6 @@
 name: generate_posts
 
 on: 
-  push:
-      branches: ["deploy"]
-      paths:
-        - 'data/posts.csv'
   workflow_dispatch:
 
 concurrency:
