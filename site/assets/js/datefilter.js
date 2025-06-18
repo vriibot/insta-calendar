@@ -13,7 +13,7 @@
   }
   
   const options = {}
-  options.pattern = /\{(.*?)\}/g
+  options.pattern = /\{([^:{}]+)\}/g
   options.template = ''
   options.middleware = function () {}
   
@@ -242,6 +242,7 @@
       exclude: [],
       startDate: null,
       endDate:null,
+      onSearch: Function.prototype
     }
   
     let debounceTimerHandle
@@ -287,12 +288,13 @@
         initWithURL(options.json)
       }
 
-      debounce(function () { search(options.startDate, options.endDate) }, options.debounceTime)
+      debounce(function () {
+         search(options.startDate, options.endDate) 
+        }, options.debounceTime)
   
       const rv = {
         search: search
       }
-  
       typeof options.success === 'function' && options.success.call(rv)
       return rv
     }
@@ -321,12 +323,10 @@
     function search (startDate, endDate) {
       if(startDate) startDate = new Date(startDate);
       if(endDate) endDate = new Date(endDate);
-      console.log([startDate, endDate])
       emptyResultsContainer()
       render(_$Repository_4.search(startDate, endDate))
+      typeof options.onSearch === 'function' && options.onSearch.call()
     }
-
-    window.search = search;
   
     function render (results) {
       const len = results.length

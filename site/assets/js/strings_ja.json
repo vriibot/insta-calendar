@@ -1,4 +1,25 @@
+---
+layout: none
+---
+{%- assign title_field = "title_ja" -%}
+{%- assign user_title_field = "user_title_ja"-%}
+{%- if site.lang == "ja" -%}
+    {%- assign title_field = "title" -%}
+    {%- assign user_title_field = "user_title"-%}
+{%- endif -%}
 {
-    "about": "about",
-    "search": "search"
+    {%- for page in site.pages -%}
+        {% if page[title_field] %}
+        "{{page.url}}" : "{{page[title_field]}}",
+        {% endif %}
+    {%- endfor -%}
+    {%- for page in site.footer_links -%}
+        {% if page[user_title_field] %}
+        "{{page.user_url}}" : "{{page[user_title_field]}}",
+        {% endif %}
+    {%- endfor -%}
+    "source": "ソース",
+    "month-year": "{month}{year}",
+    "calendar-grid": "<b>月</b><b>火</b><b>水</b><b>木</b><b>金</b><b>土</b><b>日</b>",
+    "date": "{date}"
 }

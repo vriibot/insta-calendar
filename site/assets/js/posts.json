@@ -3,7 +3,7 @@ layout: none
 ---
 
 [
-  {% for post in site.posts %}
+  {%- for post in site.posts -%}
     {
       "location" : {{ post.location | jsonify | strip_html}},
       "author" : {{ post.author | jsonify | strip_html}},
@@ -17,5 +17,5 @@ layout: none
       "content"  : {{ post.content | jsonify | strip_html }},
       "image"    : {{ post.image | jsonify | strip_html }}
     } {% unless forloop.last %},{% endunless %}
-  {% endfor %}
+  {%- endfor -%}
 ]

@@ -44,6 +44,7 @@
   {%- feed_meta -%} {%- if jekyll.environment == 'production' and
   site.google_analytics -%} {%- include google-analytics.html -%} {%- endif -%}
   {% if site.open_external_links_in_new_tab != false %}
+  <script src="{{'/assets/js/translate.js' | relative_url }}"></script>
   <script src="{{'/assets/js/new_window.js' | relative_url }}" defer></script>
   {% endif %}
 </head>

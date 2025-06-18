@@ -6,6 +6,7 @@
       class="form-control"
       name="q"
       value=""
+      placeholder="Search"
     />
   </p>
 </form>
@@ -39,10 +40,13 @@
       "<li class='card'>" +
       "<div class='content'>" +
       "<a class='post-link' href='{{site.baseurl}}{url}'>{title}</a>" +
-      "<span class='post-meta'>{date} • {author} • {tags}</span>" +
+      `<span class='post-meta'><span data-i18n-key='date' data-i18n-opt='{"date": "{date}"}'>{date}</span> • {author} • {tags}</span>`+
       "<p>{excerpt}</p>" +
       "</div>" +
       "</li>",
+    onSearch: function(){
+      window.translate()
+    }
   });
 
   function matchPriority(fieldMatched) {
