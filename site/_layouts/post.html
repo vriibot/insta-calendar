@@ -5,7 +5,13 @@ layout: default
 
   <header class="post-header">
     <a href="{{page.image}}">
-      <img src="{{ page.image | relative_url }}" alt="Preview image of {{ page.title }}">
+      <div class="image-shadow-box">
+        {% if page.image %}
+        <img src="{{ page.image | relative_url }}" alt="Preview image of {{ page.title }}">
+        {% else %}
+        <img src="{{ '/assets/images/default.jpg' | relative_url }}" alt="Preview image of {{ page.title }}" class='default-img'>
+        {% endif %}
+      </div>
     </a>
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
      <span class="post-meta">
