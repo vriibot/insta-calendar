@@ -78,6 +78,7 @@
           {%- assign day_of_week = day_timestamp | date: '%u' %}
           {%- assign month_number = day_timestamp | date: '%m' %}
           {%- assign formatted_day = day_timestamp | date: "%m-%d-%y" %}
+          {%- assign js_date = day_timestamp | date: "%Y/%m/%d" -%}
           {%- unless first_day_found %}
             {%- if day_of_week == '1' %}
               {% assign first_day_found = true %}
@@ -100,7 +101,7 @@
               {%- endfor %}
 
             {% if events != "" %}
-              <span class="calendar-event" data-timestamp="{{ formatted_day }}">{{ day_timestamp | date: '%e' }}</span>
+              <span class="calendar-event" data-timestamp="{{ js_date }}">{{ day_timestamp | date: '%e' }}</span>
             {% else %}
               <span>{{ day_timestamp | date: '%e' }}</span>
             {% endif %}
@@ -152,7 +153,7 @@ function nextPrev(dir){
   loadCalendar(currentDate);
   var firstCard = document.getElementsByClassName("calendar-month " + currentDate)[0]
   selectedDate =  new Date(firstCard.getAttribute("data-timestamp"));
-  selectedEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth()+display_num, 0);
+  selectedEnd = new Date(new Date(selectedDate.getFullYear(), selectedDate.getMonth()+display_num, 1).getTime() -1);
   console.log("Calendar: " + [selectedDate, selectedEnd])
   df.search(selectedDate, selectedEnd)
 }
@@ -212,6 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var focused = document.querySelectorAll(".focused-date");
         focused.forEach(focus => {focus.classList.remove('focused-date')})
         this.classList.add("focused-date");
+        console.log(this.getAttribute("data-timestamp"))
         selectedDate = new Date(this.getAttribute("data-timestamp"));
         selectedEnd = new Date(selectedDate.getTime() + DAY_S*1000 - 1);
         console.log("Calendar: " + [selectedDate, selectedEnd])
