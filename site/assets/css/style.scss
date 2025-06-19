@@ -271,6 +271,15 @@ h1:hover .octicon, h2:hover .octicon, h3:hover .octicon, h4:hover .octicon, h5:h
   color: $accent-color;
 }
 
+.default-img{
+  opacity: 0.5;
+  mix-blend-mode: screen;
+}
+
+.image-shadow-box{
+  background: linear-gradient(0deg, #0000 0%, $text-color 100%)
+}
+
 .post-meta{
   display: block;
 }

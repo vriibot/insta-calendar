@@ -53,12 +53,14 @@
             value = value.replace(/&amp;/g, "&");
           }
           if (prop === "url" || prop === "image") {
+            if(!value) return "{{site.baseurl}}/assets/images/default.jpg' class='default-img"
             if(new URL(document.baseURI).origin === new URL(value, document.baseURI).origin){
               return '{{site.baseurl}}'+value
             }
             return value;
           }
           if (prop === "tags"){
+            if(!value) return ""
             tags = value.split(", ");
             formatted_tags = ""
             search_url = "{{'/search/' | relative_url}}?q="
@@ -68,10 +70,12 @@
             return formatted_tags
           }
           if(prop === "source"){
+            if(!value) return ""
             return "<span class='post-meta'><i class='fa fa-external-link' aria-hidden='true'></i> <a href='"+ value + "'><span data-i18n-key='source'>Source</span></a></span>"
           }
           if(prop === "author"){
-            return value
+            if(!value) return ""
+            return `<span class='post-meta'><i class='fa fa-map' aria-hidden='true'></i> <a href="{{'/search/' | relative_url}}?q=` + value + `">`+ value + `</a></span>`;
           }
           return value.replace(
             new RegExp(document.getElementById("search-input").value, "gi"),
