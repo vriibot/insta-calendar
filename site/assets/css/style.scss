@@ -398,6 +398,7 @@ h1:hover .octicon, h2:hover .octicon, h3:hover .octicon, h4:hover .octicon, h5:h
   list-style: none;
   display: inline;
   text-transform: uppercase;
+  margin-left: 0px;
 }
 
 .footer-links a{
@@ -412,6 +413,7 @@ footer .wrapper{
 .footer-links li{
   display: inline;
   margin-right: 10px;
+  word-break: keep-all;
 }
 
 .tag-container a{
@@ -447,14 +449,15 @@ select, ::picker(select) {
 
 select {
   border: 2px solid #ddd;
-  background: #eee;
+  background-color: var(--minima-background-color);
+  color: $text-color;
   padding: 8px;
   transition: 0.4s;
 }
 
 select:hover,
 select:focus {
-  background: #ddd;
+  background-color: var(--minima-background-color);
 }
 
 .post-meta{
