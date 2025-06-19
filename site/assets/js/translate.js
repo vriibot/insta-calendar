@@ -94,7 +94,7 @@ function translateMonth(month){
 }
 
 function translateYear(year){
-    var date = new Date("1 1 " + year);
+    var date = new Date("01/01/" + year);
     var new_year = date.toLocaleString(lang, { year: "numeric" });
     return new_year;
 }
