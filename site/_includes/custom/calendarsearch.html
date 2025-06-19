@@ -40,10 +40,10 @@
 
 <!--Start Display-->
 <div class="calendar-controls">
-  <button id="calendar-back", onclick="nextPrev(-1)">
+  <button id="calendar-back" onclick="nextPrev(-1)">
     &laquo;
   </button>
-  <button id="calendar-forward", onclick="nextPrev(1)">
+  <button id="calendar-forward" onclick="nextPrev(1)">
     &raquo;
   </button>
 </div>
@@ -153,6 +153,7 @@ function nextPrev(dir){
   var firstCard = document.getElementsByClassName("calendar-month " + currentDate)[0]
   selectedDate =  new Date(firstCard.getAttribute("data-timestamp"));
   selectedEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth()+display_num, 0);
+  console.log("Calendar: " + [selectedDate, selectedEnd])
   df.search(selectedDate, selectedEnd)
 }
 
@@ -213,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
         this.classList.add("focused-date");
         selectedDate = new Date(this.getAttribute("data-timestamp"));
         selectedEnd = new Date(selectedDate.getTime() + DAY_S*1000 - 1);
+        console.log("Calendar: " + [selectedDate, selectedEnd])
         df.search(selectedDate, selectedEnd)
       });
     });

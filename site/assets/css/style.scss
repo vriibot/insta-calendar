@@ -338,12 +338,12 @@ h1:hover .octicon, h2:hover .octicon, h3:hover .octicon, h4:hover .octicon, h5:h
   border-radius: 5px;
   border: 1px solid $text-color;
   height: 34px;
-  width: 50px;
   left: 0;
   right: 0;
   position: relative;
   margin: auto;
   margin-bottom: 10px;
+  width: fit-content;
 }
 
 .calendar-controls button{
