@@ -6,20 +6,23 @@
 
 {% capture temptags %}
   {% for tag in site.tags %}
-    {{ tag[1].size | plus: 1000 }}#{{ tag[0] }}#{{ tag[1].size }}
+    {{ tag[1].size | plus: 1000 }}#{{ tag[0] }}#{{ tag[1].size }},
   {% endfor %}
 {% endcapture %}
-{% assign sortedtemptags = temptags | split:' ' | sort | reverse %}
+{% assign sortedtemptags = temptags | split:',' | sort | reverse %}
 
 <ul class="tag-container">
 {% assign i = 0 %}
 {% for temptag in sortedtemptags %}
-    {% if i == limit %}
-        {% break %} 
-    {% endif %}
-  {% assign tagitems = temptag | split: '#' %}
-  {% capture tagname %}{{ tagitems[1] }}{% endcapture %}
-  <a href="{{'/search/' | relative_url }}?q={{tagname}}"><code class="highligher-rouge"><nobr>{{ tagname }}</nobr></code></a>
-  {% assign i = i | sum: 1 %}
+    {% assign temptag2 = temptag | strip %}
+    {% unless temptag2 == "" %}
+      {% if i == limit %}
+          {% break %} 
+      {% endif %}
+      {% assign tagitems = temptag | split: '#' %}
+      {% capture tagname %}{{ tagitems[1] }}{% endcapture %}
+      <a href="{{'/search/' | relative_url }}?q={{tagname}}"><code class="highligher-rouge"><nobr>{{ tagname }}</nobr></code></a>
+      {% assign i = i | sum: 1 %}
+    {% endunless %}
 {% endfor %}
 </ul>

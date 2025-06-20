@@ -127,7 +127,9 @@ const first_num = {{first_month}};
 const last_num = {{months}};
 const default_m = {{ current_m }};
 var currentDate = default_m;
-var selectedDate = new Date().getTime()
+//default date: today 0:00
+var selectedDate = new Date();
+selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
 var selectedEnd = null;
 var df;
 

@@ -1,8 +1,13 @@
 from instagrapi import Client
 from instagrapi.exceptions import UserNotFound
+from PIL import Image
+from pillow_heif import register_heif_opener
+from tqdm.auto import tqdm
+
 from os import path
 import json
 
+register_heif_opener()
 
 from .users import *
 from .posts import *
@@ -10,7 +15,7 @@ from . import config
 from . import credentials
 
 cl = Client()
-cl.delay_range = [1, 3]
+cl.delay_range = [1, 5]
 
 LOGIN = False
 
@@ -21,7 +26,7 @@ def login():
 
    global LOGIN
    if LOGIN: return
-   cl.set_proxy(('https://user-%s-country-%s:%s@%s' % (credentials.PROXY['username'], credentials.PROXY['country'], credentials.PROXY['password'], credentials.PROXY['host_port'])))
+   #cl.set_proxy(('https://user-%s-country-%s:%s@%s' % (credentials.PROXY['username'], credentials.PROXY['country'], credentials.PROXY['password'], credentials.PROXY['host_port'])))
 
    session = None
    if path.exists(credentials.SESSION_PATH):
@@ -70,7 +75,7 @@ def process_media(m, username, user_id):
         # 'user': {
         #     'pk': m.user.pk,
         #     'username': m.user.username,
-        #     'full_name': m.user.fullname,
+        #     'full_name': m.user.full_name,
         #     'profile_pic_url': #httpUrl
         #     'profile_pic_url_hd' :
         #     'is_private': m.user.is_private,
@@ -97,17 +102,22 @@ def get_user_media(user):
    #get end point
    end = None
    if config.options['last_run']: end = config.options['last_run']
-   elif config.options['start_date']: end = config.options['start_date']
    if config.options['ignore_last_run']: end= None
+   if end==None and config.options['start_date']: end = config.options['start_date']
 
    finished = False
    cursor = None
+   page = 0
    while(not finished):
+      page += 1
+      print("page", page, len(posts))
       # print("run loop", cursor, end, config.options["posts_per_page"])
       medias, cursor = cl.user_medias_paginated(user_id, config.options["posts_per_page"], cursor)
 
-      for m in medias:
+      for i, m in enumerate(medias):
          if end and m.taken_at <= end:
+            if page == 1 and i < 3: #ignore pinned
+               continue
             finished=True
             break
          p = process_media(m, user, user_id)
@@ -115,7 +125,7 @@ def get_user_media(user):
       if cursor == "": 
          finished = True
          break
-   # json.dump(posts, open("data/media_example.json", "w", encoding="utf-8"))
+   # json.dump(posts, open("data/media_example"+user+".json", "w", encoding="utf-8"))
    return posts
 
 
@@ -155,15 +165,31 @@ def update_users():
    write_users()
    return
 
+
+def convert_to_jpg(input_file, output_file):
+    try:
+        img = Image.open(input_file)
+        img = img.convert("RGB")
+        img.save(output_file, "JPEG", quality=95)
+        
+        # Delete the original .heic file after successful conversion
+        os.remove(input_file)
+    except Exception as e:
+        print(f"Error converting {input_file} to {output_file}: {e}")
+
 def download_photo(url, name, path):
    login()
-   cl.photo_download_by_url(url, name, path)
+   path = str(cl.photo_download_by_url(url, name, path))
+   if(path.endswith(".heic")):
+      new_path = path.replace(".heic", ".jpg")
+      convert_to_jpg(path, new_path)
 
 def mine_posts():
    get_posts()
    posts = []
    for user in USERS:
       if USERS[user]["is_private"] == False:
+         # posts += json.load(open("data/media_example"+user+".json", "r", encoding="utf-8"))
          posts += get_user_media(user)
    filtered_posts = filter_posts(posts)
    for p in filtered_posts:

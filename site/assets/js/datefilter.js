@@ -55,6 +55,7 @@
   opt.sort = NoSort
   
   function put (data) {
+    data = data.reverse()
     if (isObject(data)) {
       return addObject(data)
     }
@@ -236,7 +237,7 @@
       },
       noResultsText: '',
       resultsText: '',
-      limit: 10,
+      limit: 20,
       fuzzy: false,
       debounceTime: 500,
       exclude: [],

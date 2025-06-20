@@ -15,8 +15,8 @@ def has_numbers(inputString):
     return any(char.isdigit() for char in inputString)
 
 POSTS_PATH = "data/posts.csv"
-POSTS_KEYS = ["media_id", "username", 'post_date', "code", 'description', 'alt_text', 'event_date']
-IMAGE_DIR = "site/assets/images"
+POSTS_KEYS = ["media_id", "username", 'post_date', 'event_date', "code", 'description', 'alt_text']
+IMAGE_DIR = "site/assets/images/posts"
 
 # map of id to post data
 POSTS = {}

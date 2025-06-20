@@ -8,6 +8,8 @@ INSTAGRAM_CREDENTIALS_PATH = "INSTAGRAM_KEY"
 PROXY_PATH = "PROXY_KEY"
 SESSION_PATH = "data/session.json"
 
+if(not os.path.exists("data")): os.mkdir("data")
+
 INSTAGRAM_USERNAME = None
 INSTAGRAM_PASSWORD = None
 
