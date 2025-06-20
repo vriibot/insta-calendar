@@ -1,2 +1,3 @@
 event
 *SWIRL
+*Sample Event
