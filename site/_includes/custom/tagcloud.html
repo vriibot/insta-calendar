@@ -16,13 +16,13 @@
 {% for temptag in sortedtemptags %}
     {% assign temptag2 = temptag | strip %}
     {% unless temptag2 == "" %}
-      {% if i == limit %}
+      {% if i >= limit %}
           {% break %} 
       {% endif %}
       {% assign tagitems = temptag | split: '#' %}
       {% capture tagname %}{{ tagitems[1] }}{% endcapture %}
       <a href="{{'/search/' | relative_url }}?q={{tagname}}"><code class="highligher-rouge"><nobr>{{ tagname }}</nobr></code></a>
-      {% assign i = i | sum: 1 %}
+      {% assign i = i | plus: 1 %}
     {% endunless %}
 {% endfor %}
 </ul>
