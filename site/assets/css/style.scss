@@ -441,6 +441,7 @@ footer .wrapper{
   position: absolute;
   right:0;
   margin:10px;
+  z-index: 1;
 }
 
 select, ::picker(select) {
@@ -467,6 +468,10 @@ select:focus {
 .description{
   text-align: center;
   margin-bottom: 1rem;
+}
+
+.site-nav{
+  z-index: 2;
 }
 
 @import "custom";

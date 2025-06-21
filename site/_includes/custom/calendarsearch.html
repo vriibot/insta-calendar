@@ -1,43 +1,38 @@
 <!--Get post template.-->
 {%- capture rawContent -%}
-  {% include custom/posttemplate.html %}
-{%- endcapture -%}
-
+  {%- include custom/posttemplate.html -%}
+{%- endcapture %}
 <!-- Assign which collection to use, i.e. posts, collections.-->
-{% assign pages = site.posts %}
-
+{%- assign pages = site.posts %}
 <!--Get current date.-->
-{% assign current_year = 'now' | date: '%Y' % | times: 1 %}
-{% assign current_month = 'now' | date: '%-m' % | times: 1 %}
-
+{%- assign current_year = 'now' | date: '%Y' % | times: 1 -%}
+{%- assign current_month = 'now' | date: '%-m' % | times: 1 %}
 <!--Calculate date ranges. The Default is a one year period from this month.-->
-{% assign first_year = current_year | times: 1 %}
-{% assign first_month = current_month | times: 1 %}
-{% assign last_year = current_year | plus: '1' %}
-{% assign last_month = current_month | minus: '1' %}
-{% assign current_m = first_month %}
-{%- for page in pages %}
-  {% assign event = page.date %}
-  {%- assign event_year = event | date: "%Y" | times: 1 %}
-  {%- assign event_month = event | date: "%-m" | times: 1 %}
-  {%- unless event_year >= first_year %}
-    {%- assign first_year = event_year %}
-  {%- endunless %}
-  {%- unless event_month >= first_month %}
-    {%- assign first_month = event_month %}
-  {%- endunless %}
-  {%- if event_year > last_year %}
-    {%- assign last_year = event_year %}
-  {%- endif %}
-  {%- if event_month >= last_month %}
-    {%- assign last_month = event_month %}
-  {%- endif %}
-{% endfor %}
-
+{%- assign first_year = current_year | times: 1 -%}
+{%- assign first_month = current_month | times: 1 -%}
+{%- assign last_year = current_year | plus: '1' -%}
+{%- assign last_month = current_month | minus: '1' -%}
+{%- assign current_m = first_month -%}
+{%- for page in pages -%}
+  {%- assign event = page.date -%}
+  {%- assign event_year = event | date: "%Y" | times: 1 -%}
+  {%- assign event_month = event | date: "%-m" | times: 1 -%}
+  {%- unless event_year >= first_year -%}
+    {%- assign first_year = event_year -%}
+  {%- endunless -%}
+  {%- unless event_month >= first_month -%}
+    {%- assign first_month = event_month -%}
+  {%- endunless -%}
+  {%- if event_year > last_year -%}
+    {%- assign last_year = event_year -%}
+  {%- endif -%}
+  {%- if event_month >= last_month -%}
+    {%- assign last_month = event_month -%}
+  {%- endif -%}
+{%- endfor %}
 <!--Get number of months to display.-->
-{% assign years = last_year | minus: first_year %}
-{% assign months = '12' | times: years | plus: first_month %}
-
+{%- assign years = last_year | minus: first_year -%}
+{%- assign months = '12' | times: years | plus: first_month %}
 <!--Start Display-->
 <div class="calendar-controls">
   <button id="calendar-back" onclick="nextPrev(-1)">
@@ -49,68 +44,65 @@
 </div>
 
 <div class="calendar-container">
-{% for m in (first_month..months) %}
-  {% assign year = first_year | times: 1 %}
-  {% assign month = m | times: 1 %}
+{%- for m in (first_month..months) -%}
+  {%- assign year = first_year | times: 1 -%}
+  {%- assign month = m | times: 1 -%}
   {%- if month > 12 %}
-    {% assign year = m | divided_by: '12' | plus: first_year %}
-    {% assign month = m | minus: 1 | modulo: '12' | plus: 1%}
-  {% endif %}
+    {%- assign year = m | divided_by: '12' | plus: first_year -%}
+    {%- assign month = m | minus: 1 | modulo: '12' | plus: 1 -%}
+  {%- endif %}
   <!-- Month prep -->
-  {% assign month_str = month | prepend: '0' | slice: -2, 2 %}
-  {% assign month_start_date = year | append: '-' | append: month_str | append: '-01' %}
-  {% assign month_start_timestamp = month_start_date | date: "%s" %}
-  {% assign first_day_found = false %}
-  {%- if year == current_year %}  
-      {% if month == current_month %}
-        {% assign current_m = m %}
-    {% endif %}
-  {% endif %}
-
+  {%- assign month_str = month | prepend: '0' | slice: -2, 2 -%}
+  {%- assign month_start_date = year | append: '-' | append: month_str | append: '-01' -%}
+  {%- assign month_start_timestamp = month_start_date | date: "%s" -%}
+  {%- assign first_day_found = false -%}
+  {%- if year == current_year -%}  
+    {%- if month == current_month -%}
+      {%- assign current_m = m -%}
+    {%- endif -%}
+  {%- endif %}
   <div class="calendar-month {{m}}" data-timestamp="{{ month_start_date }}">
     <h2><span data-i18n-key="month-year" data-i18n-opt='{"month": "{{ month_start_date | date: "%B" }}", "year": "{{year}}" }' >{{ month_start_date | date: "%B" }}, {{ year }}</span></h2>
     <div class="calendar-grid">
         <span style="display: contents;" data-i18n-key="calendar-grid"><b>Mo</b><b>Tu</b><b>We</b><b>Th</b><b>Fr</b><b>Sa</b><b>Su</b></span>
         <!-- First day finder, for correct formatting -->
         <!-- Adapted from: https://mikhail-yudin.ru/blog/frontend/jekyll-calendar-css-grid -->
-        {%- for i in (-7..30) %}
-          {%- assign day_timestamp = 86400 | times: i | plus: month_start_timestamp %}
-          {%- assign day_of_week = day_timestamp | date: '%u' %}
-          {%- assign month_number = day_timestamp | date: '%m' %}
-          {%- assign formatted_day = day_timestamp | date: "%m-%d-%y" %}
+        {% for i in (-7..30) -%}
+          {%- assign day_timestamp = 86400 | times: i | plus: month_start_timestamp -%}
+          {%- assign day_of_week = day_timestamp | date: '%u' -%}
+          {%- assign month_number = day_timestamp | date: '%m' -%}
+          {%- assign formatted_day = day_timestamp | date: "%m-%d-%y" -%}
           {%- assign js_date = day_timestamp | date: "%Y/%m/%d" -%}
-          {%- unless first_day_found %}
-            {%- if day_of_week == '1' %}
-              {% assign first_day_found = true %}
-            {% else %}
-              {%- continue %}
-            {% endif %}
-          {%- endunless %}
+          {%- unless first_day_found -%}
+            {%- if day_of_week == '1' -%}
+              {%- assign first_day_found = true -%}
+            {%- else -%}
+              {%- continue -%}
+            {%- endif -%}
+          {%- endunless -%}
 
-          {%- if month_str == month_number %}
+          {%- if month_str == month_number -%}
             {%- assign events = "" %}
             {%- for page in pages %}
-              {% assign event = page.date %}
-              {% assign event_date = event | date: "%m-%d-%y" %}
-              {%- if event_date == formatted_day %}
-                {%- assign event_year = event | date: "%Y" | times: 1 %}
-                {% if event_year  >= year %}
+              {%- assign event = page.date -%}
+              {%- assign event_date = event | date: "%m-%d-%y" -%}
+              {%- if event_date == formatted_day -%}
+                {%- assign event_year = event | date: "%Y" | times: 1 -%}
+                {%- if event_year  >= year -%}
                   <!-- {%- assign events = events | append: page. | append: " <i>(in <a href='" | append: post.url | append: "'>" | append: post.title | append: "</a>)</i><br>" %} -->
-                {%- endif %}
-              {%- endif %}
-              {%- endfor %}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
 
-            {% if events != "" %}
-              <span class="calendar-event" data-timestamp="{{ js_date }}">{{ day_timestamp | date: '%e' }}</span>
-            {% else %}
-              <span>{{ day_timestamp | date: '%e' }}</span>
-            {% endif %}
-          {%- else %}<span></span>{% endif %}
-        {%- endfor %}
+            {% if events != "" %}<span class="calendar-event" data-timestamp="{{ js_date }}">{{ day_timestamp | date: '%e' }}</span>
+            {% else %}<span>{{ day_timestamp | date: '%e' }}</span>{% endif %}
+          {% else %}<span></span>
+          {%- endif -%}
+        {%- endfor -%}
 
       </div>
     </div>
-{% endfor %}
+{%- endfor -%}
 </div>
 
 
@@ -122,7 +114,9 @@
 <script>
 
 const DAY_S = 86400;
-const display_num = {{site.month_display}};
+const default_display_num = {{site.month_display}};
+var display_num = default_display_num;
+if(window.innerWidth <= 600) display_num = 1;
 const first_num = {{first_month}};
 const last_num = {{months}};
 const default_m = {{ current_m }};
@@ -133,6 +127,14 @@ selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), sel
 var selectedEnd = null;
 var df;
 
+
+addEventListener("resize", (event) => { 
+  if(window.innerWidth <= 600) display_num = 1;
+  else{
+    display_num = default_display_num;
+  }
+  loadCalendar(currentDate);
+})
 
 function loadCalendar(m){
   var cards = document.getElementsByClassName("calendar-month");

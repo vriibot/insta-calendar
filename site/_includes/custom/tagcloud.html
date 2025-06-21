@@ -1,28 +1,28 @@
-{% if site.tags != "" %}
-  {% include collecttags.html %}
-{% endif %}
-
-{% assign limit = 10 %}
-
-{% capture temptags %}
-  {% for tag in site.tags %}
+<!--How many tags to display.-->
+{%- assign limit = 10 %}
+<!--Collect tags-->
+{%- if site.tags != "" -%}
+  {%- include collecttags.html -%}
+{%- endif -%}
+{%- capture temptags -%}
+  {%- for tag in site.tags -%}
     {{ tag[1].size | plus: 1000 }}#{{ tag[0] }}#{{ tag[1].size }},
-  {% endfor %}
-{% endcapture %}
-{% assign sortedtemptags = temptags | split:',' | sort | reverse %}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- assign sortedtemptags = temptags | split:',' | sort | reverse -%}
 
 <ul class="tag-container">
-{% assign i = 0 %}
-{% for temptag in sortedtemptags %}
-    {% assign temptag2 = temptag | strip %}
-    {% unless temptag2 == "" %}
-      {% if i >= limit %}
-          {% break %} 
-      {% endif %}
-      {% assign tagitems = temptag | split: '#' %}
-      {% capture tagname %}{{ tagitems[1] }}{% endcapture %}
+{%- assign i = 0 -%}
+{%- for temptag in sortedtemptags -%}
+    {%- assign temptag2 = temptag | strip -%}
+    {%- unless temptag2 == "" -%}
+      {%- if i >= limit -%}
+          {%- break -%} 
+      {%- endif -%}
+      {%- assign tagitems = temptag | split: '#' -%}
+      {%- capture tagname %}{{ tagitems[1] }}{% endcapture -%}
       <a href="{{'/search/' | relative_url }}?q={{tagname}}"><code class="highligher-rouge"><nobr>{{ tagname }}</nobr></code></a>
-      {% assign i = i | plus: 1 %}
+      {%- assign i = i | plus: 1 -%}
     {% endunless %}
-{% endfor %}
+{%- endfor -%}
 </ul>
