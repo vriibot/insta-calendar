@@ -18,7 +18,7 @@ layout: none
         "{{page.user_url}}" : "{{page[user_title_field]}}",
         {% endif %}
     {%- endfor -%}
-    "source": "ソース",
+    "source": "出典",
     "month-year": "{month}{year}",
     "calendar-grid": "<b>月</b><b>火</b><b>水</b><b>木</b><b>金</b><b>土</b><b>日</b>",
     "date": "{date}"
