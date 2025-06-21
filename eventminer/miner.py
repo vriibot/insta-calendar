@@ -2,7 +2,6 @@ from instagrapi import Client
 from instagrapi.exceptions import UserNotFound
 from PIL import Image
 from pillow_heif import register_heif_opener
-from tqdm.auto import tqdm
 
 from os import path
 import json
@@ -58,13 +57,13 @@ def login():
       cl.dump_settings(credentials.SESSION_PATH)
    LOGIN = True
 
-def process_media(m, username, user_id):
+def process_media(m):
     '''
     Convert to JSON.
     '''
     post = {
         'media_id': m.id, #includes user id
-        'username': username,
+        'username': m.user.username,
         'code':m.code,
         'post_date': m.taken_at.isoformat(), #datetime
         'media_type':m.media_type,
@@ -120,7 +119,7 @@ def get_user_media(user):
                continue
             finished=True
             break
-         p = process_media(m, user, user_id)
+         p = process_media(m)
          posts.append(p)
       if cursor == "": 
          finished = True
@@ -208,6 +207,31 @@ def mine_posts():
       } 
    # print(POSTS.keys())
    
+def mine_post(url):
+   '''For downloading specific posts.'''
+   login()
+   get_posts()
+   pk = cl.media_pk_from_url(url)
+   media = cl.media_info(pk)
+   post = process_media(media)
+   filtered = filter_posts([post])
+   if(len(filtered) > 0):
+      p = filtered[0]
+      download_photo(p['first_image'], p['code'], IMAGE_DIR)
+      POSTS[p["media_id"]] = {
+         "media_id" : p['media_id'],
+         "username" : p["username"],
+         "post_date" : p['post_date'],
+         "code" : p['code'],
+         'description': json.dumps(p['description']),
+         'alt_text': json.dumps(p['alt_text']),
+         'event_date': p['event_date'],
+         # 'image_url': p['first_image'] #temporary link
+      } 
+      write_posts()
+   else:
+      print(json.dumps(post, indent=2))
+
 
 def update_posts():
    update_users()
