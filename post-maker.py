@@ -4,11 +4,17 @@ from datetime import datetime
 import json
 import pathlib
 from string import punctuation
+import sys
 
 import demoji
 
 from eventminer import get_users, POSTS_KEYS
 from filter import filter
+
+FORCE = False
+if len(sys.argv) > 1:
+    if sys.argv[1] == "-f":
+        FORCE = True
 
 TAGS_PATH = "tags.txt"
 POSTS_PATH = "data/posts.csv"
@@ -27,11 +33,17 @@ TAG_IGNORE = []
 TAG_INCLUDE = []
 TAG_MATCHES = []
 
+TAG_ALIAS = {}
+
 def process_tag_list():
     if not path.exists(TAGS_PATH): return
     file = open(TAGS_PATH, "r", encoding="utf-8")
     for line in file.readlines():
         line=line.strip()
+        alias = line.split("=")
+        if len(alias) == 2:
+            TAG_ALIAS[alias[0][1:]] = alias[1]
+            line = alias[0]
         if line.startswith("-"):
             TAG_IGNORE.append(line[1:].lower())
         elif line.startswith("*"):
@@ -47,12 +59,18 @@ def extract_tags(description):
             if(has_alpha(word)):
                 tags.append(word[1:])
         if word.strip(punctuation) in TAG_INCLUDE:
+            if word.strip(punctuation) in TAG_ALIAS:
+                word = TAG_ALIAS[word.strip(punctuation)]
             tags.append(word.strip(punctuation).lower())
         elif word in TAG_INCLUDE:
+            if word in TAG_ALIAS:
+                word = TAG_ALIAS[word]
             tags.append(word.lower())
 
     for t in TAG_MATCHES:
         if t in description: 
+            if t in TAG_ALIAS:
+                t = TAG_ALIAS[t]
             tags.append(t.lower())
     return tags
 
@@ -84,7 +102,8 @@ def main():
         for row in reader:
             date_string = str(datetime.fromisoformat(row["event_date"]).date())
             file_name = date_string + "-" + row['media_id'].replace("_", "-") + ".md"
-            if(path.exists(POSTS_DIR + file_name)): continue
+            if(FORCE == False):
+                if(path.exists(POSTS_DIR + file_name)): continue
             name = USERS[row['username']]["full_name"]
             description = json.loads(row["description"])
             title = extract_title(description)
