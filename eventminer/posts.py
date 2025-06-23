@@ -20,6 +20,7 @@ IMAGE_DIR = "site/assets/images/posts"
 
 # map of id to post data
 POSTS = {}
+EVENT_DATES=[]
 
 def get_posts():
     '''
@@ -31,6 +32,9 @@ def get_posts():
         reader = csv.DictReader(csvfile, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
         for row in reader:
             POSTS[row["media_id"]] = row
+    for p in POSTS:
+        p = POSTS[p]
+        EVENT_DATES.append(p['event_date']+p['username'])
     return POSTS
 
 def write_posts():
@@ -84,7 +88,6 @@ def get_first_image(p):
     return None
 
 def filter_posts(posts):
-    event_dates = []
     filtered_posts = []
     for p in posts:
         if p["media_type"] != 1 and p["media_type"] != 8: continue # is not image or collection
@@ -100,8 +103,8 @@ def filter_posts(posts):
     filtered_posts = []
     for p in posts[::-1]:
         date = p['event_date']
-        if date in event_dates: continue
-        event_dates.append(date)
+        if str(date)+p['username'] in EVENT_DATES: continue
+        EVENT_DATES.append(str(date)+p['username'] )
         filtered_posts.append(p)
 
     return filtered_posts
