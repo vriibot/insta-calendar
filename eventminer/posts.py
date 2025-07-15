@@ -27,6 +27,8 @@ def get_posts():
     Load posts from CSV.
     '''
     global POSTS
+    #always reset when re-reading from csv
+    POSTS = {}
     if not path.exists(POSTS_PATH): return POSTS
     with open(POSTS_PATH, newline='', encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile, delimiter='\t', quoting=csv.QUOTE_MINIMAL)
@@ -87,7 +89,7 @@ def get_first_image(p):
             return r['thumbnail_url']
     return None
 
-def filter_posts(posts):
+def filter_posts(posts, force_same_day = False):
     filtered_posts = []
     for p in posts:
         if p["media_type"] != 1 and p["media_type"] != 8: continue # is not image or collection
@@ -99,12 +101,13 @@ def filter_posts(posts):
         filtered_posts.append(p)
 
     #if new date, add
-    posts = filtered_posts
-    filtered_posts = []
-    for p in posts[::-1]:
-        date = p['event_date']
-        if str(date)+p['username'] in EVENT_DATES: continue
-        EVENT_DATES.append(str(date)+p['username'] )
-        filtered_posts.append(p)
+    if not force_same_day:
+        posts = filtered_posts
+        filtered_posts = []
+        for p in posts[::-1]:
+            date = p['event_date']
+            if str(date)+p['username'] in EVENT_DATES: continue
+            EVENT_DATES.append(str(date)+p['username'] )
+            filtered_posts.append(p)
 
     return filtered_posts

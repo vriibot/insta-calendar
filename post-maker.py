@@ -72,6 +72,10 @@ def extract_tags(description):
             if t in TAG_ALIAS:
                 t = TAG_ALIAS[t]
             tags.append(t.lower())
+            
+    # deduplicate
+    tags = list(dict.fromkeys(tags))
+
     return tags
 
 def extract_title(description):
@@ -87,6 +91,7 @@ def extract_title(description):
             for word in line.split():
                 if word.startswith("#") or word.startswith("@"): continue
                 if not demoji.replace(word.strip(punctuation), ""): continue
+                if demoji.replace(line, " ").strip().lower() == 'tonight': continue
                 actual_line.append(word)
             if not title and len(actual_line) > 0: 
                 title = " ".join(actual_line)

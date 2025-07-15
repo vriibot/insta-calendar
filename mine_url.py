@@ -4,16 +4,20 @@ import sys
 
 import eventminer
 
+FORCE = False
+
 def main():
+    global FORCE
     args = sys.argv[1:]
     url = None
+    if "-f" in args:
+        FORCE = True
     if(len(args) >= 1):
         url = args[0]
     
     #handle credentials
     eventminer.load_credentials()
-    if not path.exists(eventminer.IMAGE_DIR): pathlib.Path(eventminer.IMAGE_DIR).mkdir(parents=True, exist_ok=True) 
     #mine post
-    eventminer.mine_post(url)
+    eventminer.mine_post(url, FORCE)
 
 main()

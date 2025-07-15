@@ -3,13 +3,15 @@ from instagrapi.exceptions import UserNotFound
 from PIL import Image
 from pillow_heif import register_heif_opener
 
+import os
 from os import path
 import json
+import pathlib
 
 register_heif_opener()
 
 from .users import *
-from .posts import *
+from . import posts
 from . import config
 from . import credentials
 
@@ -22,7 +24,6 @@ def login():
    '''
    Handle login before any command.
    '''
-
    global LOGIN
    if LOGIN: return
    #cl.set_proxy(('https://user-%s-country-%s:%s@%s' % (credentials.PROXY['username'], credentials.PROXY['country'], credentials.PROXY['password'], credentials.PROXY['host_port'])))
@@ -176,26 +177,31 @@ def convert_to_jpg(input_file, output_file):
     except Exception as e:
         print(f"Error converting {input_file} to {output_file}: {e}")
 
-def download_photo(url, name, path):
+def download_photo(url, name, file_path):
    login()
-   path = str(cl.photo_download_by_url(url, name, path))
-   if(path.endswith(".heic")):
-      new_path = path.replace(".heic", ".jpg")
-      convert_to_jpg(path, new_path)
+   #check if destination path exists and if not create
+   if not path.exists(posts.IMAGE_DIR): 
+      pathlib.Path(posts.IMAGE_DIR).mkdir(parents=True, exist_ok=True) 
+   #download and get path
+   file_path = str(cl.photo_download_by_url(url, name, file_path))
+   #convert to jpg
+   if(file_path.endswith(".heic")):
+      new_path = file_path.replace(".heic", ".jpg")
+      convert_to_jpg(file_path, new_path)
 
 def mine_posts():
-   get_posts()
-   posts = []
+   posts.get_posts()
+   postss = []
    for user in USERS:
-      if USERS[user]["is_private"] == False:
+      if USERS[user]["is_private"] == False and USERS[user]['user_id'] != 'null':
          # posts += json.load(open("data/media_example"+user+".json", "r", encoding="utf-8"))
-         posts += get_user_media(user)
-   filtered_posts = filter_posts(posts)
+         postss += get_user_media(user)
+   filtered_posts = posts.filter_posts(postss)
    for p in filtered_posts:
-      if p['media_id'] in POSTS: 
+      if p['media_id'] in posts.POSTS: 
          continue
-      download_photo(p['first_image'], p['code'], IMAGE_DIR)
-      POSTS[p["media_id"]] = {
+      download_photo(p['first_image'], p['code'], posts.IMAGE_DIR)
+      posts.POSTS[p["media_id"]] = {
          "media_id" : p['media_id'],
          "username" : p["username"],
          "post_date" : p['post_date'],
@@ -207,18 +213,18 @@ def mine_posts():
       } 
    # print(POSTS.keys())
    
-def mine_post(url):
-   '''For downloading specific posts.'''
+def mine_post(url, force_same_day=False):
+   '''For downloading a specific post by URL.'''
    login()
-   get_posts()
+   posts.get_posts()
    pk = cl.media_pk_from_url(url)
    media = cl.media_info(pk)
    post = process_media(media)
-   filtered = filter_posts([post])
+   filtered = posts.filter_posts([post],  force_same_day)
    if(len(filtered) > 0):
       p = filtered[0]
-      download_photo(p['first_image'], p['code'], IMAGE_DIR)
-      POSTS[p["media_id"]] = {
+      download_photo(p['first_image'], p['code'], posts.IMAGE_DIR)
+      posts.POSTS[p["media_id"]] = {
          "media_id" : p['media_id'],
          "username" : p["username"],
          "post_date" : p['post_date'],
@@ -228,13 +234,13 @@ def mine_post(url):
          'event_date': p['event_date'],
          # 'image_url': p['first_image'] #temporary link
       } 
-      write_posts()
+      posts.write_posts()
    else:
-      print(json.dumps(post, indent=2))
+      print(json.dumps(post, indent=2, default=str))
 
 
 def update_posts():
    update_users()
    mine_posts()
-   write_posts()
+   posts.write_posts()
    return 

@@ -11,9 +11,6 @@ def main():
     #load config
     eventminer.get_config()
 
-    #setup asset folder
-    if not path.exists(eventminer.IMAGE_DIR): pathlib.Path(eventminer.IMAGE_DIR).mkdir(parents=True, exist_ok=True) 
-
     #update posts
     eventminer.update_posts()
 
