@@ -56,8 +56,11 @@ def extract_tags(description):
     for word in words:
         word = word.lower()
         if word.startswith("#") and word[1:] not in TAG_IGNORE: 
+            word = word[1:]
             if(has_alpha(word)):
-                tags.append(word[1:])
+                if word in TAG_ALIAS:
+                    word = TAG_ALIAS[word]
+                tags.append(word.lower())
         if word.strip(punctuation) in TAG_INCLUDE:
             if word.strip(punctuation) in TAG_ALIAS:
                 word = TAG_ALIAS[word.strip(punctuation)]
