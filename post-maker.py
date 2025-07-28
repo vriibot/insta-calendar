@@ -40,21 +40,32 @@ def process_tag_list():
     file = open(TAGS_PATH, "r", encoding="utf-8")
     for line in file.readlines():
         line=line.strip()
+
+        #handle alias
         alias = line.split("=")
         if len(alias) == 2:
-            TAG_ALIAS[alias[0][1:]] = alias[1]
             line = alias[0]
+            alias = alias[1]
+            if(line.startswith("*")): TAG_ALIAS[line[1:]] = alias
+            else: TAG_ALIAS[line.lower()] = alias
+            print(TAG_ALIAS)
+        
+        #ignore case
         if line.startswith("-"):
             TAG_IGNORE.append(line[1:].lower())
+        #match case
         elif line.startswith("*"):
             TAG_MATCHES.append(line[1:])
+        #include case
         else: TAG_INCLUDE.append(line.lower())
 
 def extract_tags(description):
     tags = []
     words = demoji.replace(description, " ").split()
+    #check each word
     for word in words:
         word = word.lower()
+        # explicit tags
         if word.startswith("#") and word[1:] not in TAG_IGNORE: 
             word = word[1:]
             if(has_alpha(word)):
