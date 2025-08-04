@@ -48,7 +48,6 @@ def process_tag_list():
             alias = alias[1]
             if(line.startswith("*")): TAG_ALIAS[line[1:]] = alias
             else: TAG_ALIAS[line.lower()] = alias
-            print(TAG_ALIAS)
         
         #ignore case
         if line.startswith("-"):
