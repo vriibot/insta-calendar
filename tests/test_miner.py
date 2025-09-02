@@ -8,6 +8,8 @@ eventminer.miner.LOGIN = False
 eventminer.posts.IMAGE_DIR = "testimages"
 eventminer.posts.POSTS_PATH = "test_posts.csv"
 eventminer.users.USERS_PATH = "test_users.csv"
+eventminer.users.USERNAMES_PATH = "test_usernames.txt"
+if(path.exists(eventminer.users.USERS_PATH)): os.remove(eventminer.users.USERS_PATH)
 if(path.exists(eventminer.users.USERNAMES_PATH)): os.remove(eventminer.users.USERNAMES_PATH)
 if(path.exists(eventminer.posts.POSTS_PATH )): os.remove(eventminer.posts.POSTS_PATH)
 if(path.exists(eventminer.posts.IMAGE_DIR)): shutil.rmtree(eventminer.posts.IMAGE_DIR, True)
