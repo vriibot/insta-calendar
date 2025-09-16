@@ -48,7 +48,7 @@
   {%- assign year = first_year | times: 1 -%}
   {%- assign month = m | times: 1 -%}
   {%- if month > 12 %}
-    {%- assign year = m | divided_by: '12' | plus: first_year -%}
+    {%- assign year = m | minus: 1 | divided_by: '12' | plus: first_year -%}
     {%- assign month = m | minus: 1 | modulo: '12' | plus: 1 -%}
   {%- endif %}
   <!-- Month prep -->
