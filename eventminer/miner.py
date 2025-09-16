@@ -58,14 +58,16 @@ def login():
       cl.dump_settings(credentials.SESSION_PATH)
    LOGIN = True
 
-def process_usertags(users):
+def process_usertags(users, old_username):
    '''
-   Process list of usertags for posts with multiple users.
+   Process list of usertags for posts with multiple users, where main user doesn't appear on our list.
    Returns none if a single user.
    Searches list for known users.
    '''
    username = None
-   if len(users) > 1:
+   usernames = USERS.keys()
+   #must have tagged users and main user most not be in our list
+   if len(users) >= 1 and old_username not in usernames:
       usernames = USERS.keys()
       #match for username
       for u in users:
@@ -78,7 +80,7 @@ def process_media(m):
     Convert to JSON.
     '''
 
-    username = process_usertags(m.usertags)
+    username = process_usertags(m.usertags,  m.user.username)
     post = {
         'media_id': m.id, #includes user id
         'username': username or m.user.username,
@@ -237,6 +239,7 @@ def mine_post(url, force_same_day=False):
    get_users()
    pk = cl.media_pk_from_url(url)
    media = cl.media_info(pk)
+   # print(json.dumps(media, indent=2, default=str))
    post = process_media(media)
    filtered = posts.filter_posts([post],  force_same_day)
    if(len(filtered) > 0):
