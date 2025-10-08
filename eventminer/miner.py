@@ -10,15 +10,16 @@ import pathlib
 
 register_heif_opener()
 
-from .users import *
-from . import posts
-from . import config
-from . import credentials
+from eventminer.users import *
+from eventminer.posts import Posts
+from eventminer import config
+from eventminer import credentials
 
 cl = Client()
 cl.delay_range = [1, 5]
 
 LOGIN = False
+UPLOADER = None
 
 def login():
    '''
@@ -196,31 +197,42 @@ def convert_to_jpg(input_file, output_file):
     except Exception as e:
         print(f"Error converting {input_file} to {output_file}: {e}")
 
+def upload(file_path):
+   if UPLOADER:
+      url = UPLOADER.upload(file_path)
+      os.remove(file_path)
+      return url
+
 def download_photo(url, name, file_path):
    login()
    #check if destination path exists and if not create
-   if not path.exists(posts.IMAGE_DIR): 
-      pathlib.Path(posts.IMAGE_DIR).mkdir(parents=True, exist_ok=True) 
+   if not path.exists(Posts.IMAGE_DIR): 
+      pathlib.Path(Posts.IMAGE_DIR).mkdir(parents=True, exist_ok=True) 
    #download and get path
    file_path = str(cl.photo_download_by_url(url, name, file_path))
    #convert to jpg
    if(file_path.endswith(".heic")):
       new_path = file_path.replace(".heic", ".jpg")
       convert_to_jpg(file_path, new_path)
+      file_path = new_path
+   uploaded_url = upload(file_path)
+   if uploaded_url:
+      return uploaded_url
+   return Posts.IMAGE_DIR + "/" + name + ".jpg"
 
 def mine_posts():
-   posts.get_posts()
+   Posts.load_posts()
    postss = []
    for user in USERS:
       if USERS[user]["is_private"] == False and USERS[user]['user_id'] != 'null':
          # posts += json.load(open("data/media_example"+user+".json", "r", encoding="utf-8"))
          postss += get_user_media(user)
-   filtered_posts = posts.filter_posts(postss)
+   filtered_posts = Posts.filter_posts(postss)
    for p in filtered_posts:
-      if p['media_id'] in posts.POSTS: 
+      if p['media_id'] in Posts.POSTS: 
          continue
-      download_photo(p['first_image'], p['code'], posts.IMAGE_DIR)
-      posts.POSTS[p["media_id"]] = {
+      file_path = download_photo(p['first_image'], p['code'], Posts.IMAGE_DIR)
+      Posts.POSTS[p["media_id"]] = {
          "media_id" : p['media_id'],
          "username" : p["username"],
          "post_date" : p['post_date'],
@@ -228,6 +240,7 @@ def mine_posts():
          'description': json.dumps(p['description']),
          'alt_text': json.dumps(p['alt_text']),
          'event_date': p['event_date'],
+         'image_url': file_path,
          # 'image_url': p['first_image'] #temporary link
       } 
    # print(POSTS.keys())
@@ -235,17 +248,17 @@ def mine_posts():
 def mine_post(url, force_same_day=False):
    '''For downloading a specific post by URL.'''
    login()
-   posts.get_posts()
+   Posts.load_posts()
    get_users()
    pk = cl.media_pk_from_url(url)
    media = cl.media_info(pk)
    # print(json.dumps(media, indent=2, default=str))
    post = process_media(media)
-   filtered = posts.filter_posts([post],  force_same_day)
+   filtered = Posts.filter_posts([post],  force_same_day)
    if(len(filtered) > 0):
       p = filtered[0]
-      download_photo(p['first_image'], p['code'], posts.IMAGE_DIR)
-      posts.POSTS[p["media_id"]] = {
+      file_path =download_photo(p['first_image'], p['code'], Posts.IMAGE_DIR)
+      Posts.POSTS[p["media_id"]] = {
          "media_id" : p['media_id'],
          "username" : p["username"],
          "post_date" : p['post_date'],
@@ -253,15 +266,20 @@ def mine_post(url, force_same_day=False):
          'description': json.dumps(p['description']),
          'alt_text': json.dumps(p['alt_text']),
          'event_date': p['event_date'],
+         'image_url': file_path,
          # 'image_url': p['first_image'] #temporary link
       } 
-      posts.write_posts()
+      Posts.update_posts()
    else:
       print(json.dumps(post, indent=2, default=str))
 
 
-def update_posts():
+def update_posts(uploader = None):
+   global UPLOADER
+   UPLOADER = uploader
+   if UPLOADER:
+      UPLOADER.setup()
    update_users()
    mine_posts()
-   posts.write_posts()
+   Posts.update_posts()
    return 

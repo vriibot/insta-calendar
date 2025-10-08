@@ -5,10 +5,11 @@ import json
 import pathlib
 from string import punctuation
 import sys
+import unicodedata
 
 import demoji
 
-from eventminer import get_users, POSTS_KEYS
+from eventminer import get_users
 from filter import filter
 
 FORCE = False
@@ -60,6 +61,9 @@ def process_tag_list():
 
 def extract_tags(description):
     tags = []
+
+    # handle kana combining characters
+    description = unicodedata.normalize("NFC", description)
     words = demoji.replace(description, " ").split()
     #check each word
     for word in words:
@@ -129,6 +133,8 @@ def main():
             tags = "- " + "\n- ".join(tags)
             description = description.replace("\n", "<br>\n").replace("<br>\n<br>\n", "\n\n")
             image_dir = "/" + IMAGES_DIR + row["code"] + ".jpg"
+            if row['image_url']:
+                image_dir = row['image_url']
             file = open(POSTS_DIR + file_name, "w", encoding="utf-8")
             file.write("---\nauthor: "+ name + "\nimage: " + image_dir + "\ntitle: "+title+"\ndate: " + date_string + "\nsource: 'https://instagram.com/p/" + row["code"] +"'\ntags:\n" + tags + "\n---\n" + description)
             file.close()

@@ -4,3 +4,4 @@ dateparser==1.2.1
 pillow-heif==0.22.0
 dateparser==1.2.1
 demoji==1.1.0
+cloudinary==1.44.1

@@ -1,5 +1,6 @@
 """
 Handles loading of credentials.
+Uploader credentials are handled by their own handlers.
 """
 
 import os
