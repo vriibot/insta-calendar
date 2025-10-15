@@ -70,7 +70,7 @@ minima:
 # Site settings
 permalink: /:title/
 show_excerpts: true
-timezone: Europe/London
+timezone: UTC
 
 # Build settings
 plugins:
