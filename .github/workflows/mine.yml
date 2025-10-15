@@ -41,6 +41,35 @@ jobs:
           PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
           PROXY_COUNTRY: ${{ secrets.PROXY_COUNTRY }}
           PROXY_HOST_PORT: ${{ secrets.PROXY_HOST_PORT }}
+
+      - name: Check if posts.csv changed
+        id: check_posts
+        run: |
+          git add -A
+          if git diff --cached --quiet -- "data/posts.csv"; then
+            echo "posts_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "posts_changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if users.csv changed
+        id: check_users
+        run: |
+          git add -A
+          if git diff --cached --quiet -- "data/users.csv"; then
+            echo "users_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "users_changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run post-maker script
+        if: steps.check_posts.outputs.posts_changed == 'true'
+        run: python post-maker.py
+
+      - name: Run author-maker script
+        if: steps.check_users.outputs.users_changed == 'true'
+        run: python author-maker.py
+
       - name: Create PR
         uses: peter-evans/create-pull-request@v7
         with:
