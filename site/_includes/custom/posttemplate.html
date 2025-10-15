@@ -2,7 +2,7 @@
 {%- if site.authors -%}
   {% assign coll = site.authors | first %}
   {% assign author_base = coll.url | split: coll.short_name | first %}
-  {% assign author_url = author_base %}
+  {% assign author_url = author_base | relative_url %}
 {%- else -%}
     {%- assign author_base = nil -%}
     {%- assign author_url = "/search/?q=" -%}
