@@ -218,7 +218,7 @@ def download_photo(url, name, dir, upload_after=False):
       uploaded_url = upload(file_path)
       if uploaded_url:
          return uploaded_url
-   return "/".join(dir.split("/")[1:]) + "/" + name + ".jpg"
+   return "/" + "/".join(dir.split("/")[1:]) + "/" + name + ".jpg"
 
 def mine_posts():
    Posts.load_posts()
@@ -285,7 +285,9 @@ def update_posts(uploader = None):
    global UPLOADER
    UPLOADER = uploader
    if UPLOADER:
-      UPLOADER.setup()
+      success = UPLOADER.setup()
+      if not success:
+         UPLOADER = None
    update_users()
    mine_posts()
    Posts.update_posts()
