@@ -38,8 +38,24 @@ The API mines backwards from the most recent post, so setting an earlier start d
 
 ## Website settings
 
+### Author Pages
+
+You can add author pages to the site by adding an author collection in `_config.yml`. Use `author_maker.py` to generate author pages from Instagram data in `users.csv`.
+
+```yml
+collections:
+  authors:
+    output: true
+    permalink: /a/:title
+```
+
+You can include (or remove) the `authors.md` file in the root directory to provide a list of authors stylized as `places`.
+
 ### Language toggle
 Some basic client side translation is available. Define strings in `assets/js/strings_<lang>.json`. You can also define patterns. The general idea is to provide localisation of UI elements (where bilingual content is not really feasible) without generating two versions of the website.
+
+#### Translating author names
+If you have author pages enabled, you can add a localized `name_<lang>` to the author page. Otherwise, you can define translations manually in the strings file, using the Instagram Username/author field for posts as the key.
 
 ## GitHub Action Automation
 

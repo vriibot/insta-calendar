@@ -22,6 +22,10 @@ collections:
   posts:
     output: true
     permalink: /p/:title
+  add author pages:
+  authors:
+    output: true
+    permalink: /a/:title
 
 month_display: 2
 month_columns: 2
@@ -33,6 +37,11 @@ defaults:
       type: "posts"
     values:
       layout: "post"
+  - scope:
+      path: ""
+      type: "authors"
+    values:
+      layout: "author"
 author:
   name: vriibot
   url: 'https://vriibot.com'
@@ -71,6 +80,6 @@ plugins:
   - jekyll-seo-tag
   - jekyll-webp
 
-# Pagination settings
-paginate: 10
-paginate_path: page/:num/
+# # Pagination settings
+# paginate: 10
+# paginate_path: page/:num/

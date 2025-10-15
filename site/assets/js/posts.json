@@ -4,10 +4,20 @@ layout: none
 
 [
   {%- for post in site.posts -%}
+    {%- if post.author %}
+      {%- assign author_page = site.authors | where: "short_name", post.author | first %}
+    {%- else %}
+      {%- assign author_page = nil %}
+    {%- endif %}
     {
-      "location" : {{ post.location | jsonify | strip_html}},
       "author" : {{ post.author | jsonify | strip_html}},
-      "location_url" : {{ post.location_url | jsonify | strip_html}},
+      {% if author_page -%}
+      "author_name" : "{{ author_page.name }}",
+      {% elsif post.author_name != nil -%}
+      "author_name" : {{ post.author_name | jsonify | strip_html }},
+      {% else -%}
+      "author_name" : {{ post.author | jsonify | strip_html }},
+      {% endif -%}
       "tags"     : "{{ post.tags | join: ', ' }}",
       "title"    : {{ post.title | jsonify | strip_html }},
       "excerpt"  : {{ post.excerpt | jsonify | strip_html }},

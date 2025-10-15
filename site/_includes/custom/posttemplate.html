@@ -1,3 +1,13 @@
+<!--Get the author collection URL-->
+{%- if site.authors -%}
+  {% assign coll = site.authors | first %}
+  {% assign author_base = coll.url | split: coll.short_name | first %}
+  {% assign author_url = author_base %}
+{%- else -%}
+    {%- assign author_base = nil -%}
+    {%- assign author_url = "/search/?q=" -%}
+{%- endif -%}
+
 <li class='card'>
     <a class='post-link' href='{url}'>
         <div class="image-shadow-box">
@@ -9,7 +19,7 @@
             <a class='post-link' href='{url}'>{title}</a>
         </h3>
         <span class='post-meta'><i class='fa fa-calendar' aria-hidden='true'></i> <span data-i18n-key='date' data-i18n-opt='{"date": "{date}"}'>{date}</span></span>
-        {author}
+        <span class='post-meta'><i class='fa fa-map' aria-hidden='true'></i> <a href="{{author_url}}{author}"><span data-i18n-key="{{author_base}}{author}">{author_name}</span></a></span>
         {source}
         <ul class='tag-container'>{tags}</ul>
     </div>

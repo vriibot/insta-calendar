@@ -1,3 +1,11 @@
+<!--Get the author collection URL-->
+{%- if site.authors -%}
+  {% assign coll = site.authors | first %}
+  {% assign author_base = coll.url | split: coll.short_name | first %}
+{%- else -%}
+    {%- assign author_base = nil -%}
+{%- endif -%}
+
 <form id="searchform">
   <p>
     <input
@@ -23,8 +31,16 @@
       if (prop === "title" || prop === "excerpt") {
         value = value.replace(/&amp;/g, "&");
       }
-      if (prop === "url") {
+      if (prop === "url" || prop === "date") {
         return value;
+      }
+      if(prop === "author"){
+          if(!value) return ""
+          return value;
+        }
+      if(prop === "author_name"){
+          if(!value) return ""
+          return value;
       }
       if(!value) return ""
       return value.replace(
@@ -41,7 +57,7 @@
       "<li class='card'>" +
       "<div class='content'>" +
       "<a class='post-link' href='{{site.baseurl}}{url}'>{title}</a>" +
-      `<span class='post-meta'><span data-i18n-key='date' data-i18n-opt='{"date": "{date}"}'>{date}</span> • {author} • {tags}</span>`+
+      `<span class='post-meta'><span data-i18n-key='date' data-i18n-opt='{"date": "{date}"}'>{date}</span> • <span data-i18n-key="{{author_base}}{author}">{author_name}</span> • {tags}</span>`+
       "<p>{excerpt}</p>" +
       "</div>" +
       "</li>",

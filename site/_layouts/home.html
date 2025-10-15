@@ -9,49 +9,4 @@ layout: default
 
   {{ content }}
 
-  {% if site.paginate %}
-    {% assign posts = paginator.posts %}
-  {% else %}
-    {% assign posts = site.posts %}
-  {% endif %}
-
-  {%- if posts.size > 0 -%}
-    {%- if page.list_title -%}
-      <h2 class="post-list-heading">{{ page.list_title }}</h2>
-    {%- endif -%}
-    <ul class="post-list">
-      {%- for post in posts -%}
-      <li class="card">
-        <a class="post-link" href="{{ post.url | relative_url }}">
-          {% include custom/webp.html path=post.image alt=post.title %}
-        </a>
-        <div class="content">
-          <h3>
-            <a class="post-link" href="{{ post.url | relative_url }}">
-              {{ post.title | escape }}
-            </a>
-          </h3>
-          <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }} • {% include custom/read_time_or_words.html %} • {% include custom/tags.html %}</span>
-          {%- if site.show_excerpts -%}
-            <p>{{ post.excerpt | strip_html }}</p>
-          {%- elsif site.show_excerpts_html -%}
-            {{ post.excerpt }}
-          {% endif %}
-        </div>
-      </li>
-      {%- endfor -%}
-    </ul>
-
-    {% if site.paginate %}
-    <div class="centred-homepage-content">
-      {% include custom/paginator.html %}
-    </div>
-    {%- endif %}
-
-  {%- endif -%}
-
-  {% if site.kofi_floating_text != blank? and site.kofi_id != blank? %}
-      {% include custom/donatefloating.html %}
-  {% endif %}
-
 </div>

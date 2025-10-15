@@ -3,9 +3,11 @@ layout: none
 ---
 {%- assign title_field = "title_en" -%}
 {%- assign user_title_field = "user_title_en" -%}
+{%- assign name_field = "name_en" -%}
 {%- if site.lang == "en" -%}
     {%- assign title_field = "title" -%}
     {%- assign user_title_field = "user_title" -%}
+    {%- assign name_field = "name" -%}
 {%- endif -%}
 {
     {%- for page in site.pages -%}
@@ -16,6 +18,11 @@ layout: none
     {%- for page in site.footer_links -%}
         {%- if page[user_title_field] -%}
         "{{page.user_url}}" : "{{page[user_title_field]}}",
+        {% endif %}
+    {%- endfor -%}
+    {%- for page in site.authors -%}
+        {%- if page[name_field] -%}
+        "{{page.url}}" : "{{page[name_field]}}",
         {% endif %}
     {%- endfor -%}
     "source": "source",

@@ -1,0 +1,27 @@
+{%- assign places = site.authors %}
+
+<ul class="place-container post-list">
+  {%- for place in places %}
+  <li class="place-card">
+    <div class="content">
+        {% if place.image %}
+            <img src="{{ place.image | relative_url }}" alt="{{ place.name }} Avatar" class="place-avatar">
+        {% else %}
+            <img src="{{ '/assets/images/default-avatar.svg' | relative_url }}" alt="{{ place.name }} Avatar" class="place-avatar">
+        {% endif %}
+      <h3><a href="{{ place.url | relative_url }}"><span data-i18n-key="{{place.url}}">{{ place.name }}</span></a></h3>
+      <span class="post-meta">
+        {% if place.address %}
+            <span>{{ place.address }}<br></span>
+        {% endif %}
+        {% if place.external == true %}
+            <span>Website: <a href="{{ place.external_url }}">{{ place.external_url }}</a><br></span>
+        {% else %}
+            <span>Instagram: <a href="https://www.instagram.com/{{place.username}}">{{place.username}}</a><br></span>
+        {% endif %}
+      </span>
+      <p>{{ place.content }}</p>
+    </div>
+  </li>
+  {%- endfor %}
+</ul>

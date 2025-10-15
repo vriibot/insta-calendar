@@ -22,8 +22,9 @@ layout: default
       </time> 
     </span>
     {% if page.author %}
+    {% assign author = site.authors | where: 'short_name', page.author | first %}
     <span class="post-meta">
-        <i class="fa fa-map" aria-hidden='true'></i> <a href="{{'/search/' | relative_url}}?q={{page.author}}">{{page.author}}</a>
+        <i class="fa fa-map" aria-hidden='true'></i> <a href="{{ author.url }}"><span data-i18n-key="{{author.url}}">{{ author.name }}</span></a>
     </span>
     {% endif %}
     {% if page.source%}

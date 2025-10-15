@@ -1,5 +1,6 @@
 import eventminer
 from eventminer.posts import Posts
+from eventminer.users import Users
 import os
 from os import path
 import pytest
@@ -8,13 +9,14 @@ import shutil
 def cleanup():
     Posts.POSTS = {}
     Posts.EVENT_DATES = []
+    Users.USERS = {}
     eventminer.miner.LOGIN = False
     Posts.IMAGE_DIR = "testimages"
     Posts.POSTS_PATH = "test_posts.csv"
-    eventminer.users.USERS_PATH = "test_users.csv"
-    eventminer.users.USERNAMES_PATH = "test_usernames.txt"
-    if(path.exists(eventminer.users.USERS_PATH)): os.remove(eventminer.users.USERS_PATH)
-    if(path.exists(eventminer.users.USERNAMES_PATH)): os.remove(eventminer.users.USERNAMES_PATH)
+    Users.USERS_PATH = "test_users.csv"
+    Users.USERNAMES_PATH = "test_usernames.txt"
+    if(path.exists(Users.USERS_PATH)): os.remove(Users.USERS_PATH)
+    if(path.exists(Users.USERNAMES_PATH)): os.remove(Users.USERNAMES_PATH)
     if(path.exists(Posts.POSTS_PATH )): os.remove(Posts.POSTS_PATH)
     if(path.exists(Posts.IMAGE_DIR)): shutil.rmtree(Posts.IMAGE_DIR, True)
 
@@ -96,10 +98,10 @@ def test_mine_user():
 
 def test_mine_posts_no_id():
     '''User information for users without instagram accounts.'''
-    assert path.exists(eventminer.users.USERS_PATH) == False, "Users CSV should not exist before mining."
+    assert path.exists(Users.USERS_PATH) == False, "Users CSV should not exist before mining."
     
-    file = open(eventminer.users.USERS_PATH, "w")
-    file.write(",".join(eventminer.users.USERS_KEYS) + "\n" + ",".join(["a", "null", "null", "null", "null"]))
+    file = open(Users.USERS_PATH, "w")
+    file.write(",".join(Users.USERS_KEYS) + "\n" + ",".join(["a", "null", "null", "null", "null"]))
     file.close()
     eventminer.credentials.load_credentials()
     user_data = eventminer.miner.mine_posts()

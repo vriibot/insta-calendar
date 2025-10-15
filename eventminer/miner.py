@@ -10,7 +10,7 @@ import pathlib
 
 register_heif_opener()
 
-from eventminer.users import *
+from eventminer.users import Users
 from eventminer.posts import Posts
 from eventminer import config
 from eventminer import credentials
@@ -66,10 +66,10 @@ def process_usertags(users, old_username):
    Searches list for known users.
    '''
    username = None
-   usernames = USERS.keys()
+   usernames = Users.USERS.keys()
    #must have tagged users and main user most not be in our list
    if len(users) >= 1 and old_username not in usernames:
-      usernames = USERS.keys()
+      usernames = Users.USERS.keys()
       #match for username
       for u in users:
          if u.user.username in usernames:
@@ -117,7 +117,7 @@ def process_media(m):
 def get_user_media(user):
    login()
    posts = []
-   user_id = USERS[user]["user_id"]
+   user_id = Users.USERS[user]["user_id"]
 
    #get end point
    end = None
@@ -161,29 +161,28 @@ def mine_user(username, user_data):
    user_data["user_id"] = info["pk"]
    user_data["full_name"] = info["full_name"]
    user_data["is_private"] = info["is_private"]
-   user_data["profile_pic_url"] = str(info["profile_pic_url"])
+   user_data["profile_pic_url"] = download_photo(info["profile_pic_url"], username+"_profile", Users.IMAGE_DIR)
+   user_data["biography"] = json.dumps(info["biography"])
+   user_data['address_street'] = info['address_street']
+   user_data['longitude'] = info['longitude']
+   user_data['latitude'] = info['latitude']
+   user_data['external'] = False
+   user_data['external_url'] = ""
    return user_data
 
 def mine_users(usernames):
    for username in usernames:
       #get user data
-      user_data = dict.fromkeys(USERS_KEYS)
-      if username in USERS:
-         user_data = USERS[username]
+      user_data = dict.fromkeys(Users.USERS_KEYS)
+      if username in Users.USERS:
+         user_data = Users.USERS[username]
       
       user_data['username'] = username
 
       #do we need to update?
       if not user_data["user_id"] or not user_data['full_name']:
          user_data = mine_user(username, user_data)
-         USERS[username] = user_data
-
-def update_users():
-   usernames = get_usernames()
-   users = get_users()
-   mine_users(usernames)
-   write_users()
-   return
+         Users.USERS[username] = user_data
 
 
 def convert_to_jpg(input_file, output_file):
@@ -203,35 +202,36 @@ def upload(file_path):
       os.remove(file_path)
       return url
 
-def download_photo(url, name, file_path):
+def download_photo(url, name, dir, upload_after=False):
    login()
    #check if destination path exists and if not create
-   if not path.exists(Posts.IMAGE_DIR): 
-      pathlib.Path(Posts.IMAGE_DIR).mkdir(parents=True, exist_ok=True) 
+   if not path.exists(dir): 
+      pathlib.Path(dir).mkdir(parents=True, exist_ok=True) 
    #download and get path
-   file_path = str(cl.photo_download_by_url(url, name, file_path))
+   file_path = str(cl.photo_download_by_url(url, name, dir))
    #convert to jpg
    if(file_path.endswith(".heic")):
       new_path = file_path.replace(".heic", ".jpg")
       convert_to_jpg(file_path, new_path)
       file_path = new_path
-   uploaded_url = upload(file_path)
-   if uploaded_url:
-      return uploaded_url
-   return Posts.IMAGE_DIR + "/" + name + ".jpg"
+   if upload_after:
+      uploaded_url = upload(file_path)
+      if uploaded_url:
+         return uploaded_url
+   return "/".join(dir.split("/")[1:]) + "/" + name + ".jpg"
 
 def mine_posts():
    Posts.load_posts()
    postss = []
-   for user in USERS:
-      if USERS[user]["is_private"] == False and USERS[user]['user_id'] != 'null':
+   for user in Users.USERS:
+      if Users.USERS[user]["is_private"] == False and Users.USERS[user]['user_id'] != 'null':
          # posts += json.load(open("data/media_example"+user+".json", "r", encoding="utf-8"))
          postss += get_user_media(user)
    filtered_posts = Posts.filter_posts(postss)
    for p in filtered_posts:
       if p['media_id'] in Posts.POSTS: 
          continue
-      file_path = download_photo(p['first_image'], p['code'], Posts.IMAGE_DIR)
+      file_path = download_photo(p['first_image'], p['code'], Posts.IMAGE_DIR, upload_after=True)
       Posts.POSTS[p["media_id"]] = {
          "media_id" : p['media_id'],
          "username" : p["username"],
@@ -249,7 +249,7 @@ def mine_post(url, force_same_day=False):
    '''For downloading a specific post by URL.'''
    login()
    Posts.load_posts()
-   get_users()
+   Users.get_users()
    pk = cl.media_pk_from_url(url)
    media = cl.media_info(pk)
    # print(json.dumps(media, indent=2, default=str))
@@ -257,7 +257,7 @@ def mine_post(url, force_same_day=False):
    filtered = Posts.filter_posts([post],  force_same_day)
    if(len(filtered) > 0):
       p = filtered[0]
-      file_path =download_photo(p['first_image'], p['code'], Posts.IMAGE_DIR)
+      file_path =download_photo(p['first_image'], p['code'], Posts.IMAGE_DIR, upload_after=True)
       Posts.POSTS[p["media_id"]] = {
          "media_id" : p['media_id'],
          "username" : p["username"],
@@ -273,6 +273,13 @@ def mine_post(url, force_same_day=False):
    else:
       print(json.dumps(post, indent=2, default=str))
 
+
+def update_users():
+   usernames = Users.get_usernames()
+   users = Users.get_users()
+   mine_users(usernames)
+   Users.write_users()  
+   return
 
 def update_posts(uploader = None):
    global UPLOADER

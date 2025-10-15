@@ -9,7 +9,7 @@ import unicodedata
 
 import demoji
 
-from eventminer import get_users
+from eventminer import Users
 from filter import filter
 
 FORCE = False
@@ -23,7 +23,7 @@ POSTS_DIR = "site/_posts/"
 
 IMAGES_DIR = "assets/images/posts/"
 
-USERS = get_users()
+USERS = Users.get_users()
 
 def has_alpha(inputString):
     return any(char.isalpha() for char in inputString)
@@ -127,6 +127,7 @@ def main():
             if(FORCE == False):
                 if(path.exists(POSTS_DIR + file_name)): continue
             name = USERS[row['username']]["full_name"]
+            username = USERS[row['username']]["username"]
             description = json.loads(row["description"])
             title = extract_title(description)
             tags = extract_tags(description)
@@ -136,7 +137,7 @@ def main():
             if row['image_url']:
                 image_dir = row['image_url']
             file = open(POSTS_DIR + file_name, "w", encoding="utf-8")
-            file.write("---\nauthor: "+ name + "\nimage: " + image_dir + "\ntitle: "+title+"\ndate: " + date_string + "\nsource: 'https://instagram.com/p/" + row["code"] +"'\ntags:\n" + tags + "\n---\n" + description)
+            file.write("---\nauthor: "+ username + "\nauthor_name: "+ name + "\nimage: " + image_dir + "\ntitle: "+title+"\ndate: " + date_string + "\nsource: 'https://instagram.com/p/" + row["code"] +"'\ntags:\n" + tags + "\n---\n" + description)
             file.close()
 
 main()

@@ -196,7 +196,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if(prop === "author"){
           if(!value) return ""
-          return `<span class='post-meta'><i class='fa fa-map' aria-hidden='true'></i> <a href="{{'/search/' | relative_url}}?q=` + value + `">`+ value + `</a></span>`;
+          return value;
+        }
+        if(prop === "author_name"){
+          if(!value) return ""
+          return value;
         }
         return value
       },
