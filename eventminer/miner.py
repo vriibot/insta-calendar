@@ -286,7 +286,7 @@ def update_posts(uploader = None):
    UPLOADER = uploader
    if UPLOADER:
       success = UPLOADER.setup()
-      if not success:
+      if success == False:
          UPLOADER = None
    update_users()
    mine_posts()

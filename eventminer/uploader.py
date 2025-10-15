@@ -8,7 +8,7 @@ class Uploader:
         self.handler = handler
 
     def setup(self):
-        self.handler.setup()
+        return self.handler.setup()
 
     def upload(self, path):
         return self.handler.upload(path)

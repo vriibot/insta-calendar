@@ -3,6 +3,11 @@ import pathlib
 import sys
 
 import eventminer
+from eventminer.uploader import Uploader
+from eventminer.handler.cloudinary import CloudinaryHandler
+
+uploader = Uploader(CloudinaryHandler())
+uploader.setup()
 
 FORCE = False
 
@@ -17,6 +22,8 @@ def main():
     
     #handle credentials
     eventminer.load_credentials()
+
+    eventminer.miner.UPLOADER = uploader
     #mine post
     eventminer.mine_post(url, FORCE)
 
