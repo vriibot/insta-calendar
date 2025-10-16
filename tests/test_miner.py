@@ -11,6 +11,7 @@ def cleanup():
     Posts.EVENT_DATES = []
     Users.USERS = {}
     eventminer.miner.LOGIN = False
+    eventminer.miner.UPLOADER = None
     Posts.IMAGE_DIR = "testimages"
     Posts.POSTS_PATH = "test_posts.csv"
     Users.USERS_PATH = "test_users.csv"
@@ -95,6 +96,23 @@ def test_mine_user():
     username = "instagram"
     user_data = eventminer.miner.mine_user(username, {})
     assert user_data["user_id"] == '25025320'
+
+def test_update_users():
+    assert path.exists(Posts.POSTS_PATH) == False, "Posts CSV should not exist before mining."
+    eventminer.credentials.load_credentials()
+
+    usernames = open(Users.USERNAMES_PATH, "w")
+    usernames.write("instagram\n")
+    usernames.close()
+
+    eventminer.miner.update_users()
+    posts_csv = open(Posts.POSTS_PATH).readlines()
+
+    # added to postcsv and created image
+    assert len(posts_csv) >= 2
+
+    #clean up
+    cleanup()
 
 def test_mine_posts_no_id():
     '''User information for users without instagram accounts.'''

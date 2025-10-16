@@ -103,7 +103,7 @@ class Posts:
         url = None
         resources = p['resources']
         if len(resources) < 1: 
-            return p["image_versions2"]['candidates'][0]['url']
+            return p["image_versions2"].candidates[0].url
         for r in p["resources"]:
             if r['media_type'] == 1:
                 return r['thumbnail_url']
