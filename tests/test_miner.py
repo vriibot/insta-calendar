@@ -10,7 +10,7 @@ def cleanup():
     Posts.POSTS = {}
     Posts.EVENT_DATES = []
     Users.USERS = {}
-    eventminer.miner.LOGIN = False
+    # eventminer.miner.LOGIN = False
     Posts.IMAGE_DIR = "testimages"
     Posts.POSTS_PATH = "test_posts.csv"
     Users.USERS_PATH = "test_users.csv"
@@ -19,28 +19,13 @@ def cleanup():
     if(path.exists(Users.USERNAMES_PATH)): os.remove(Users.USERNAMES_PATH)
     if(path.exists(Posts.POSTS_PATH )): os.remove(Posts.POSTS_PATH)
     if(path.exists(Posts.IMAGE_DIR)): shutil.rmtree(Posts.IMAGE_DIR, True)
+    eventminer.credentials.load_credentials()
+    eventminer.get_config()
 
 cleanup()
 
-# @pytest.fixture(autouse=True)
-# def setup(monkeypatch):
-#     monkeypatch.setattr(posts, "IMAGE_DIR", "testimages")
-#     monkeypatch.setattr(posts, "POSTS_PATH", "test_posts.csv")
-
-# def test_no_session_login(monkeypatch):
-#     monkeypatch.setattr(credentials, "SESSION_PATH", "test_session.json")
-#     miner.LOGIN = False
-#     try:
-#         miner.login()
-#     except Exception:
-#         assert False
-#     assert miner.LOGIN == True
-#     os.remove(credentials.SESSION_PATH)
-
 def test_login():
     assert eventminer.miner.LOGIN == False, "Should not be logged in before login attempt."
-
-    eventminer.credentials.load_credentials()
     # try:
     eventminer.miner.login()
     # except Exception:
@@ -57,8 +42,6 @@ def test_mine_bad_user():
 def test_mine_post():
     assert path.exists(Posts.POSTS_PATH) == False, "Posts CSV should not exist before mining."
 
-    eventminer.credentials.load_credentials()
-    eventminer.miner.login()
     eventminer.miner.mine_post("https://www.instagram.com/p/DKq-UpRSF-1/")
     posts_csv = open(Posts.POSTS_PATH).readlines()
 
@@ -71,9 +54,6 @@ def test_mine_post():
 
 def test_mine_post_force_same_date():
     assert path.exists(Posts.POSTS_PATH) == False, "Posts CSV should not exist before mining."
-
-    eventminer.credentials.load_credentials()
-    eventminer.miner.login()
 
     #setup existing event
     posts_csv = open(Posts.POSTS_PATH, "w")
@@ -91,7 +71,7 @@ def test_mine_post_force_same_date():
     cleanup()
 
 def test_mine_user():
-    eventminer.credentials.load_credentials()
+
     username = "instagram"
     user_data = eventminer.miner.mine_user(username, {})
     assert user_data["user_id"] == '25025320'
@@ -103,7 +83,7 @@ def test_mine_posts_no_id():
     file = open(Users.USERS_PATH, "w")
     file.write(",".join(Users.USERS_KEYS) + "\n" + ",".join(["a", "null", "null", "null", "null"]))
     file.close()
-    eventminer.credentials.load_credentials()
+
     user_data = eventminer.miner.mine_posts()
     assert True
     #clean up

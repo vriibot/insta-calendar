@@ -22,6 +22,8 @@ DEFAULT_CONFIG = {
     "ignore_last_run": False,
     # number of posts to download at one time
     "posts_per_page": 50,
+    # custom user agent string
+    "user_agent": None,
 }
 
 CURRENT_RUN = datetime.now(timezone.utc)
@@ -48,7 +50,8 @@ def __parse_config():
     #set defaults
     __set_default(options, "posts_per_page")
     __set_default(options, "ignore_last_run")
-
+    __set_default(options, "user_agent")
+    
 def __create_config():
     '''
     Internal

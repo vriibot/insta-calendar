@@ -4,8 +4,10 @@ Uploader credentials are handled by their own handlers.
 """
 
 import os
+import pyotp
 
 INSTAGRAM_CREDENTIALS_PATH = "INSTAGRAM_KEY"
+TFA_KEY_PATH = "2FA_KEY"
 PROXY_PATH = "PROXY_KEY"
 SESSION_PATH = "data/session.json"
 
@@ -21,9 +23,11 @@ PROXY = {
     "host_port": None
 }
 
+TFA_KEY = False
 
 def load_credentials():
-    global INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD, PROXY
+    global INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD, PROXY, TFA_KEY
+
     if "INSTAGRAM_USERNAME" in os.environ and "INSTAGRAM_PASSWORD" in os.environ: 
         INSTAGRAM_USERNAME = os.environ["INSTAGRAM_USERNAME"]
         INSTAGRAM_PASSWORD = os.environ["INSTAGRAM_PASSWORD"]
@@ -45,3 +49,18 @@ def load_credentials():
         PROXY['password']= lines[1].strip()
         PROXY['country'] = lines[2].strip()
         PROXY['host_port'] = lines[3].strip()
+    
+    if "INSTAGRAM_TFA_KEY" in os.environ:
+        TFA_KEY = os.environ["TFA_KEY"]
+    elif os.path.exists(TFA_KEY_PATH):
+        file = open(TFA_KEY_PATH)
+        lines = file.readlines()
+        TFA_KEY = lines[0].strip()
+
+def generate_verification_code():
+    '''
+    Generate Verification code for 2FA.
+    '''
+    totp = pyotp.TOTP(TFA_KEY)
+    verification_code = totp.now()
+    return verification_code

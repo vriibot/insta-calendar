@@ -10,3 +10,7 @@ site/.*
 dev/
 .pytest_cache
 /site/Gemfile.lock
+
+.DS_Store
+.AppleDouble
+.LSOverride

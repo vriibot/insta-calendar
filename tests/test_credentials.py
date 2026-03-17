@@ -5,9 +5,6 @@ import pytest
 
 default_proxy = dict(credentials.PROXY)
 
-# if(path.exists(credentials.PROXY_PATH)): os.remove(credentials.PROXY_PATH)
-# if(path.exists(credentials.INSTAGRAM_CREDENTIALS_PATH)): os.remove(credentials.INSTAGRAM_CREDENTIALS_PATH)
-
 def clear_env(monkeypatch, vars):
     for v in vars:
         if v in os.environ:
@@ -26,9 +23,8 @@ def setup(monkeypatch):
 
 
 def test_load_local_credentials(monkeypatch):
-    credentials.PROXY = dict(default_proxy)
+    #remove these two env vars to trigger load from file
     clear_env(monkeypatch, ["INSTAGRAM_USERNAME", "PROXY_USERNAME"])
-
     file = open(credentials.PROXY_PATH, "w")
     file.write("username\npassword\ncountry\nhost:0000")
     file.close()
@@ -42,14 +38,13 @@ def test_load_local_credentials(monkeypatch):
     assert credentials.PROXY["password"]  == "password"
     assert credentials.PROXY["country"]  == "country"
     assert credentials.PROXY["host_port"]  == "host:0000"
-
     os.remove(credentials.PROXY_PATH)
     os.remove(credentials.INSTAGRAM_CREDENTIALS_PATH)
-    credentials.PROXY = dict(default_proxy)
+    monkeypatch.undo()
+    credentials.load_credentials()
 
 def test_load_env_credentials(monkeypatch):
-    credentials.PROXY = dict(default_proxy)
-
+    #set all env vars
     set_env(monkeypatch, ["INSTAGRAM_USERNAME", "INSTAGRAM_PASSWORD", "PROXY_USERNAME", "PROXY_PASSWORD", "PROXY_COUNTRY", "PROXY_HOST_PORT"], ["username", "password", "username", "password", "country", "host:1000"])
     credentials.load_credentials()
     assert credentials.INSTAGRAM_USERNAME == "username"
@@ -59,4 +54,5 @@ def test_load_env_credentials(monkeypatch):
     assert credentials.PROXY["country"]  == "country"
     assert credentials.PROXY["host_port"]  == "host:1000"
 
-    credentials.PROXY = dict(default_proxy)
+    monkeypatch.undo()
+    credentials.load_credentials()

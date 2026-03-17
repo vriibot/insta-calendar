@@ -2,6 +2,7 @@ from instagrapi import Client
 from instagrapi.exceptions import UserNotFound
 from PIL import Image
 from pillow_heif import register_heif_opener
+import pyotp
 
 import os
 from os import path
@@ -27,15 +28,22 @@ def login():
    '''
    global LOGIN
    if LOGIN: return
+   if config.options['user_agent']:
+      cl.set_user_agent(config.options['user_agent'])
+
    #cl.set_proxy(('https://user-%s-country-%s:%s@%s' % (credentials.PROXY['username'], credentials.PROXY['country'], credentials.PROXY['password'], credentials.PROXY['host_port'])))
 
    session = None
    if path.exists(credentials.SESSION_PATH):
       session = cl.load_settings(credentials.SESSION_PATH)
 
+   verification_code = ""
+   if credentials.TFA_KEY:
+         verification_code = credentials.generate_verification_code()
+
    if session:
       cl.set_settings(session)
-      cl.login(credentials.INSTAGRAM_USERNAME, credentials.INSTAGRAM_PASSWORD)
+      cl.login(credentials.INSTAGRAM_USERNAME, credentials.INSTAGRAM_PASSWORD,True, verification_code)
 
       try:
             cl.get_timeline_feed()
@@ -49,12 +57,12 @@ def login():
          cl.set_settings({})
          cl.set_uuids(old_session["uuids"])
 
-         cl.login(credentials.INSTAGRAM_USERNAME, credentials.INSTAGRAM_PASSWORD)
+         cl.login(credentials.INSTAGRAM_USERNAME, credentials.INSTAGRAM_PASSWORD, True, verification_code)
          cl.get_timeline_feed()
 
       cl.dump_settings(credentials.SESSION_PATH)
    else:
-      cl.login(credentials.INSTAGRAM_USERNAME, credentials.INSTAGRAM_PASSWORD)
+      cl.login(credentials.INSTAGRAM_USERNAME, credentials.INSTAGRAM_PASSWORD,True, verification_code)
       cl.get_timeline_feed()
       cl.dump_settings(credentials.SESSION_PATH)
    LOGIN = True
