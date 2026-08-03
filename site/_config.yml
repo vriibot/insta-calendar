@@ -1,13 +1,13 @@
 # Basic site setup
 remote_theme: JakeSteam/minimaJake
-title: Osaka Ripped Flyers
-description: Gigs and shit in Osaka <br>大阪のライブとかクソみたいなやつ
+title: insta-calendar
+description: It's a calendar blog for events.
 accent_colour: "#ff0000"
 # url: https://history.jakelee.co.uk
 future: true
 
-#baseurl:
-url: https://osaka.rippedflyers.net/
+baseurl: /insta-calendar
+url: https://vriibot.github.io/insta-calendar
 
 
 #langauge settings for language toggle
@@ -25,6 +25,7 @@ collections:
   posts:
     output: true
     permalink: /p/:title
+  add author pages:
   authors:
     output: true
     permalink: /a/:title
@@ -44,10 +45,13 @@ defaults:
       type: "authors"
     values:
       layout: "author"
+author:
+  name: vriibot
+  url: 'https://vriibot.com'
 
 footer_links:
   - { user_title: 'About', user_url: '/about/'}
-  - { user_title: 'GitHub', user_url: "https://github.com/rippedflyers/osaka"}
+  - { user_title: 'GitHub', user_url: "https://github.com/vriibot/insta-calendar"}
   - { user_title: "RSS Feed", user_title_ja: "RSSフィード", user_url: "/feed.xml" }
 
 # Social / dark mode settings
@@ -79,6 +83,6 @@ plugins:
   - jekyll-seo-tag
   - jekyll-webp
 
-# Pagination settings
+# # Pagination settings
 # paginate: 10
 # paginate_path: page/:num/

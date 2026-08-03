@@ -1,0 +1,26 @@
+name: rebase
+
+on:
+  push:
+    branches: ['main']
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  rebase:
+    runs-on: [ ubuntu-latest ]
+
+    concurrency:
+      group: "rebase-deploy"
+      cancel-in-progress: false
+
+    steps:
+      - name: git-rebase
+        uses: tiacsys/git-rebase@v1
+        with:
+          repo: "https://${{ github.actor }}:${{ secrets.MY_TOKEN }}@github.com/${{ github.repository }}.git"
+          source_branch: "deploy"
+          destination_branch: "main"
